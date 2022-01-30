@@ -12,3 +12,4 @@
 # Useful links:
 - React Native 
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
+- [React Navigation Typescript](https://reactnavigation.org/docs/typescript/)
