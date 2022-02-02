@@ -42,10 +42,10 @@ export class SpacebookClient {
     return new Headers({x: 'yy'});
   }
 
-  private static req<RequestT = undefined>(
+  private static req<RequestT extends object | undefined = undefined>(
     url: string,
-    method: keyof typeof Verbs,
-    body: RequestT,
+    verb: keyof typeof Verbs,
+    requestBody: RequestT,
     parameterQueries?: Array<{key: string; value: string}>,
     requriesAuth: boolean = true,
   ): Request {
@@ -53,12 +53,19 @@ export class SpacebookClient {
 
     const fullURL: string = `${this.baseURL}${url}${pathQueries}`;
 
-    const headers: Headers = requriesAuth
+    const authHeaders: Headers | undefined = requriesAuth
       ? SpacebookClient.authHeaders()
-      : new Headers();
+      : undefined;
 
+    const finalRequestDetails = {
+      method: verb,
+      headers: authHeaders,
+      body: requestBody,
+    } as RequestInit;
+
+    console.log(fullURL);
     console.log(requriesAuth);
-    return new Request('');
+    return new Request(fullURL, finalRequestDetails);
   }
 
   static login(username: string, password: string): LoginResponse | LoginError {
@@ -69,8 +76,11 @@ export class SpacebookClient {
         username: username,
         password: password,
       },
+      undefined,
+      false,
     );
-    fetch(testRequest).then();
+    console.log(testRequest);
+    fetch(testRequest).then(x => console.log(`response: ${JSON.stringify(x)}`));
 
     return {session_token: 'xx', user_id: 22};
   }
