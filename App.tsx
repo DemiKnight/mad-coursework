@@ -1,9 +1,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Login} from './src/components/Auth/Login/Login';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
+import {SpacebookClient} from './src/services/utils/SpacebookClient';
 
 export type RootStackParams = {
   Login: undefined;
@@ -48,6 +48,8 @@ const App = () => {
     () => ({
       signIn: (username, password) => {
         // console.log(username + password);
+        SpacebookClient.login(username, password);
+
         setState(prev => ({...prev, userToken: `${username}${password}`}));
         return Promise.resolve({token: 'xx'});
       },
