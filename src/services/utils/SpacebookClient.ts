@@ -1,5 +1,6 @@
 import {
-  CommonErrors,
+  CommonAppErrors,
+  CommonHTTPErrors,
   LoginError,
   LoginRequest,
   LoginResponse,
@@ -21,7 +22,7 @@ export class SpacebookClient {
   private static queryBuilder(
     input: Array<{key: string; value: string}> | undefined,
   ): string {
-    if (input === undefined || input.length === 0) {
+    if (input === undefined || input?.length === 0) {
       return '';
     } else {
       const endTargetIndex = input.length - 1;
@@ -38,8 +39,11 @@ export class SpacebookClient {
     }
   }
 
-  private static authHeaders(): Headers {
-    return new Headers({x: 'yy'});
+  private static authHeaders(): Headers | CommonAppErrors.TokenNotFound {
+    // Get any token stores in x
+    const key: string = 'xxxxxxxxxx';
+
+    return new Headers({'X-Authorization': key});
   }
 
   private static req<RequestT extends object | undefined = undefined>(
@@ -92,7 +96,7 @@ export class SpacebookClient {
     password: string,
   ): RegisterResponse | RegisterErrors {}
 
-  static logout(): Success | CommonErrors {
+  static logout(): Success | CommonHTTPErrors {
     return true;
   }
 }

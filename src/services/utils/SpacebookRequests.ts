@@ -1,9 +1,13 @@
 // General Errors
-export enum CommonErrors {
+export enum CommonHTTPErrors {
   Server_Error,
   Unauthorised,
   NotFound,
   BadRequest,
+}
+
+export enum CommonAppErrors {
+  TokenNotFound,
 }
 
 export const _Success = true;
@@ -19,7 +23,7 @@ export type LoginResponse = {
   user_id: number;
 };
 
-export type LoginError = 'Invalid' | CommonErrors.Server_Error;
+export type LoginError = 'Invalid' | CommonHTTPErrors.Server_Error;
 
 // Logout
 
@@ -30,5 +34,5 @@ export type RegisterResponse = {
   user_id: number;
 };
 export type RegisterErrors =
-  | CommonErrors.BadRequest
-  | CommonErrors.Server_Error;
+  | CommonHTTPErrors.BadRequest
+  | CommonHTTPErrors.Server_Error;
