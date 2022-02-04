@@ -5,6 +5,7 @@ import {
   LoginRequest,
   LoginResponse,
   RegisterErrors,
+  RegisterRequest,
   RegisterResponse,
   Success,
 } from './SpacebookRequests';
@@ -96,12 +97,26 @@ export class SpacebookClient {
     return {session_token: 'xx', user_id: 22};
   }
 
-  static register(
+  static async register(
     email: string,
     firstName: string,
     last_name: string,
     password: string,
-  ): RegisterResponse | RegisterErrors {}
+  ): Promise<RegisterResponse | RegisterErrors> {
+    const testRequest = await SpacebookClient.req<RegisterRequest>(
+      'user',
+      Verbs.POST,
+      {
+        email: email,
+        firstName: firstName,
+        lastName: last_name,
+        password: password,
+      },
+      undefined,
+      false,
+    );
+    fetch();
+  }
 
   static logout(): Success | CommonHTTPErrors {
     return true;

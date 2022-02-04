@@ -1,16 +1,20 @@
 import React from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput} from 'react-native';
 import {AuthContext} from '../../../../App';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParams} from '../Auth';
 
-export const Login = () => {
+type LoginProps = NativeStackScreenProps<AuthStackParams, 'Login'>;
+
+export const Login = ({navigation}: LoginProps) => {
   const [username, setUsername] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
 
   const {signIn} = React.useContext(AuthContext);
 
   return (
-    <SafeAreaView style={styles.homeText}>
-      <Text>Login Screen Placeholder</Text>
+    <SafeAreaView>
+      <Text>Login</Text>
       <TextInput
         style={styles.input}
         value={username}
@@ -22,6 +26,10 @@ export const Login = () => {
         onChangeText={setPassword}
       />
       <Button title="Sign in" onPress={() => signIn(username, password)} />
+      <Button
+        title="To Register"
+        onPress={() => navigation.navigate('Register')}
+      />
     </SafeAreaView>
   );
 };

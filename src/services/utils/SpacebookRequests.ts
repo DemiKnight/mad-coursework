@@ -28,7 +28,12 @@ export type LoginError = 'Invalid' | CommonHTTPErrors.Server_Error;
 // Logout
 
 // Register
-export type RegisterRequest = {};
+export type RegisterRequest = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+};
 
 export type RegisterResponse = {
   user_id: number;

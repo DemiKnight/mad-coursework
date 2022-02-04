@@ -14,7 +14,12 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 
 export type AuthContextT = {
   signIn: (username: string, password: string) => Promise<{token: string}>;
-  signUp: (username: string, password: string) => Promise<{token: string}>;
+  signUp: (
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string,
+  ) => Promise<{token: string}>;
   signOut: () => void;
 };
 
@@ -50,13 +55,20 @@ const App = () => {
     () => ({
       signIn: (username, password) => {
         // console.log(username + password);
-        SpacebookClient.login(username, password);
+        const potentialToken = SpacebookClient.login(username, password);
 
         setState(prev => ({...prev, userToken: `${username}${password}`}));
         return Promise.resolve({token: 'xx'});
       },
-      signUp: (username, password) => {
-        console.log(username + password);
+      signUp: (email, firstName, lastName, password) => {
+        const potentialToken = SpacebookClient.register(
+          email,
+          firstName,
+          lastName,
+          password,
+        );
+
+        // TOdo
         return Promise.resolve({token: 'xx'});
       },
       signOut: () => {},

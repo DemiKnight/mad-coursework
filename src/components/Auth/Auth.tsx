@@ -3,18 +3,18 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Login} from './Login/Login';
 import {Register} from './Register/Register';
 
-type AuthStackParams = {
-  login: undefined;
-  register: undefined;
+export type AuthStackParams = {
+  Login: undefined;
+  Register: undefined;
 };
 
 const AuthStack = createNativeStackNavigator<AuthStackParams>();
 
 export const Auth = () => {
   return (
-    <AuthStack.Navigator initialRouteName="login">
-      <AuthStack.Screen name="login" component={Login} />
-      <AuthStack.Screen name="register" component={Register} />
+    <AuthStack.Navigator initialRouteName="Login">
+      <AuthStack.Screen name="Login" component={Login} />
+      <AuthStack.Screen name="Register" component={Register} />
     </AuthStack.Navigator>
   );
 };
