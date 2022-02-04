@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
 import {SpacebookClient} from './src/services/utils/SpacebookClient';
+import Keychain, {UserCredentials} from 'react-native-keychain';
 
 export type RootStackParams = {
   Login: undefined;
@@ -32,11 +33,12 @@ const App = () => {
 
   React.useEffect(() => {
     const obtainAuthToken = async () => {
+      const store: false | UserCredentials =
+        await Keychain.getGenericPassword();
       setState(prev => {
-        // todo, acutally retrieve the authencatioin from storage.
         return {
           ...prev,
-          userToken: undefined,
+          userToken: store === false ? undefined : store.password,
         };
       });
     };
@@ -68,7 +70,6 @@ const App = () => {
         {state.userToken !== undefined ? (
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={Home} />
-            {/*<Stack.Screen name="Login" component={Login} />*/}
           </Stack.Navigator>
         ) : (
           <Auth />

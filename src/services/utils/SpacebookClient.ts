@@ -8,6 +8,7 @@ import {
   RegisterResponse,
   Success,
 } from './SpacebookRequests';
+import Keychain from 'react-native-keychain';
 
 export enum Verbs {
   GET = 'GET',
@@ -27,9 +28,6 @@ export class SpacebookClient {
     } else {
       const endTargetIndex = input.length - 1;
       return input.reduce((acc, value, index) => {
-        // if (acc === '') {
-        //   acc += '?';
-        // }
         acc += `${value.key}=${value.value}`;
         if (index !== endTargetIndex) {
           acc += '&';
@@ -39,27 +37,33 @@ export class SpacebookClient {
     }
   }
 
-  private static authHeaders(): Headers | CommonAppErrors.TokenNotFound {
+  private static async authHeaders(): Promise<
+    Headers | CommonAppErrors.TokenNotFound
+  > {
     // Get any token stores in x
-    const key: string = 'xxxxxxxxxx';
+    const key: Promise<CommonAppErrors.TokenNotFound | Headers> =
+      Keychain.getGenericPassword().then(store => {
+        return store === false
+          ? CommonAppErrors.TokenNotFound
+          : new Headers({'X-Authorization': store.password});
+      });
 
-    return new Headers({'X-Authorization': key});
+    return await key;
   }
 
-  private static req<RequestT extends object | undefined = undefined>(
+  private static async req<RequestT extends object | undefined = undefined>(
     url: string,
     verb: keyof typeof Verbs,
     requestBody: RequestT,
     parameterQueries?: Array<{key: string; value: string}>,
     requriesAuth: boolean = true,
-  ): Request {
+  ): Promise<Request> {
     const pathQueries: string = SpacebookClient.queryBuilder(parameterQueries);
 
     const fullURL: string = `${this.baseURL}${url}${pathQueries}`;
 
-    const authHeaders: Headers | undefined = requriesAuth
-      ? SpacebookClient.authHeaders()
-      : undefined;
+    const authHeaders: Headers | CommonAppErrors.TokenNotFound | undefined =
+      requriesAuth ? await SpacebookClient.authHeaders() : undefined;
 
     const finalRequestDetails = {
       method: verb,
@@ -72,8 +76,11 @@ export class SpacebookClient {
     return new Request(fullURL, finalRequestDetails);
   }
 
-  static login(username: string, password: string): LoginResponse | LoginError {
-    const testRequest: Request = SpacebookClient.req<LoginRequest>(
+  static async login(
+    username: string,
+    password: string,
+  ): Promise<LoginResponse | LoginError> {
+    const testRequest: Request = await SpacebookClient.req<LoginRequest>(
       'login',
       Verbs.POST,
       {
