@@ -12,6 +12,11 @@ export const Login = ({navigation}: LoginProps) => {
 
   const {signIn} = React.useContext(AuthContext);
 
+  const isSubmitDisabled = React.useMemo<boolean>(
+    () => username !== '' && password !== '' && username?.includes('@'),
+    [username, password],
+  );
+
   return (
     <SafeAreaView>
       <Text>Login</Text>
@@ -25,7 +30,11 @@ export const Login = ({navigation}: LoginProps) => {
         value={password}
         onChangeText={setPassword}
       />
-      <Button title="Sign in" onPress={() => signIn(username, password)} />
+      <Button
+        disabled={!isSubmitDisabled}
+        title="Sign in"
+        onPress={() => signIn(username, password)}
+      />
       <Button
         title="To Register"
         onPress={() => navigation.navigate('Register')}

@@ -14,8 +14,20 @@ export const Register = ({navigation}: RegisterProps) => {
 
   const {signUp} = React.useContext(AuthContext);
 
+  // todo improve or use third-party library
+  const isSubmitDisabled = React.useMemo<boolean>(
+    () =>
+      password !== '' &&
+      firstName !== '' &&
+      lastName !== '' &&
+      email !== '' &&
+      email?.includes('@'),
+    [firstName, lastName, password, email],
+  );
+
+  console.log(isSubmitDisabled);
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.wrapper}>
       <Text>Register here:</Text>
       <TextInput
         autoCapitalize="none"
@@ -44,6 +56,7 @@ export const Register = ({navigation}: RegisterProps) => {
       />
       <Button
         title="Sign up"
+        disabled={!isSubmitDisabled}
         onPress={() => signUp(email, firstName, lastName, password)}
       />
       <Button title="To Login" onPress={() => navigation.navigate('Login')} />
@@ -57,9 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  homeText: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  wrapper: {
+    padding: 40,
   },
 });
