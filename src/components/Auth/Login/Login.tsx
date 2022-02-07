@@ -12,6 +12,7 @@ export const Login = ({navigation}: LoginProps) => {
 
   const {signIn} = React.useContext(AuthContext);
 
+  // todo improve or use third-party library
   const isSubmitDisabled = React.useMemo<boolean>(
     () => username !== '' && password !== '' && username?.includes('@'),
     [username, password],

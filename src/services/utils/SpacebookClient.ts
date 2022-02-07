@@ -38,18 +38,21 @@ export class SpacebookClient {
     }
   }
 
-  private static async authHeaders(): Promise<
-    Headers | CommonAppErrors.TokenNotFound
+  private static async authKey(): Promise<
+    string | CommonAppErrors.TokenNotFound
   > {
-    // Get any token stores in x
-    const key: Promise<CommonAppErrors.TokenNotFound | Headers> =
-      Keychain.getGenericPassword().then(store => {
-        return store === false
-          ? CommonAppErrors.TokenNotFound
-          : new Headers({'X-Authorization': store.password});
+    return Keychain.getGenericPassword()
+      .then(store => {
+        if (store) {
+          return store.password;
+        } else {
+          return CommonAppErrors.TokenNotFound;
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        return CommonAppErrors.TokenNotFound;
       });
-
-    return await key;
   }
 
   private static async req<RequestT extends object | undefined = undefined>(
@@ -63,12 +66,27 @@ export class SpacebookClient {
 
     const fullURL: string = `${this.baseURL}${url}${pathQueries}`;
 
-    const authHeaders: Headers | CommonAppErrors.TokenNotFound | undefined =
-      requriesAuth ? await SpacebookClient.authHeaders() : undefined;
+    const headersToInclude = new Headers({'Content-Type': 'application/json'});
+
+    if (requriesAuth) {
+      const potentialKey: string | CommonAppErrors.TokenNotFound =
+        await this.authKey();
+
+      if (potentialKey === CommonAppErrors.TokenNotFound) {
+        console.error(
+          'Token not found for authenticating requests! Everything will crash & burn',
+        );
+        return Promise.reject(
+          `API request ${url} requires auth but error whilst obtaining token`,
+        );
+      } else {
+        headersToInclude.set('X-Authorization', potentialKey);
+      }
+    }
 
     const finalRequestDetails = {
       method: verb,
-      headers: authHeaders,
+      headers: headersToInclude,
       body: requestBody,
     } as RequestInit;
 
