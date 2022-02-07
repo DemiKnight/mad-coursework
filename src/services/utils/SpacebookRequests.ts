@@ -8,6 +8,8 @@ export enum CommonHTTPErrors {
 
 export enum CommonAppErrors {
   TokenNotFound,
+
+  UnknownError,
 }
 
 export const _Success = true;
@@ -18,12 +20,15 @@ export type LoginRequest = {
   username: string;
   password: string;
 };
-export type LoginResponse = {
-  session_token: string;
-  user_id: number;
-};
+export class LoginResponse {
+  session_token?: string;
+  user_id?: number;
+}
 
-export type LoginError = 'Invalid' | CommonHTTPErrors.Server_Error;
+export type LoginError =
+  | 'Invalid'
+  | CommonHTTPErrors.Server_Error
+  | CommonAppErrors.UnknownError;
 
 // Logout
 

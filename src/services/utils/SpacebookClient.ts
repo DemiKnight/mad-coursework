@@ -92,9 +92,30 @@ export class SpacebookClient {
       false,
     );
     console.log(testRequest);
-    fetch(testRequest).then(x => console.log(`response: ${JSON.stringify(x)}`));
-
-    return {session_token: 'xx', user_id: 22};
+    return fetch(testRequest).then(async (response: Response) => {
+      const body = await response.json();
+      switch (response.status) {
+        case 200:
+          console.log('Successful login');
+          if (body instanceof LoginResponse) {
+            return body;
+          } else {
+            console.error(`Issue when parsing successful login body! ${body}`);
+            return 'Invalid';
+          }
+        case 400:
+          console.log(
+            `Error whilst logging in: Invalid username/password! ${body}`,
+          );
+          return 'Invalid';
+        case 500:
+          console.error(`Server error whilst logging in ${body}!`);
+          return CommonHTTPErrors.Server_Error;
+        default:
+          console.error(`Unknown error whilst logging in! ${body}`);
+          return CommonAppErrors.UnknownError;
+      }
+    });
   }
 
   static async register(
@@ -115,7 +136,7 @@ export class SpacebookClient {
       undefined,
       false,
     );
-    fetch();
+    fetch(testRequest).then;
   }
 
   static logout(): Success | CommonHTTPErrors {
