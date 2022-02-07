@@ -92,30 +92,37 @@ export class SpacebookClient {
       false,
     );
     console.log(testRequest);
-    return fetch(testRequest).then(async (response: Response) => {
-      const body = await response.json();
-      switch (response.status) {
-        case 200:
-          console.log('Successful login');
-          if (body instanceof LoginResponse) {
-            return body;
-          } else {
-            console.error(`Issue when parsing successful login body! ${body}`);
+    return fetch(testRequest)
+      .then(async (response: Response) => {
+        const body = await response.json();
+        switch (response.status) {
+          case 200:
+            console.log('Successful login');
+            if (body instanceof LoginResponse) {
+              return body;
+            } else {
+              console.error(
+                `Issue when parsing successful login body! ${body}`,
+              );
+              return 'Invalid';
+            }
+          case 400:
+            console.log(
+              `Error whilst logging in: Invalid username/password! ${body}`,
+            );
             return 'Invalid';
-          }
-        case 400:
-          console.log(
-            `Error whilst logging in: Invalid username/password! ${body}`,
-          );
-          return 'Invalid';
-        case 500:
-          console.error(`Server error whilst logging in ${body}!`);
-          return CommonHTTPErrors.Server_Error;
-        default:
-          console.error(`Unknown error whilst logging in! ${body}`);
-          return CommonAppErrors.UnknownError;
-      }
-    });
+          case 500:
+            console.error(`Server error whilst logging in ${body}!`);
+            return CommonHTTPErrors.Server_Error;
+          default:
+            console.error(`Unknown error whilst logging in! ${body}`);
+            return CommonAppErrors.UnknownHttpError;
+        }
+      })
+      .catch(error => {
+        console.error(`Unknown error whilst logging in! ${error}`);
+        return CommonAppErrors.UnknownHttpError;
+      });
   }
 
   static async register(
@@ -129,14 +136,42 @@ export class SpacebookClient {
       Verbs.POST,
       {
         email: email,
-        firstName: firstName,
-        lastName: last_name,
+        first_name: firstName,
+        last_name: last_name,
         password: password,
       },
       undefined,
       false,
     );
-    fetch(testRequest).then;
+    return fetch(testRequest)
+      .then(async (response: Response) => {
+        const responseString = JSON.stringify(response);
+        switch (response.status) {
+          case 201: // created user successfully.
+            const body = await response.json();
+            if (body instanceof RegisterResponse) {
+              return body;
+            } else {
+              console.error(
+                `Issue when parsing successful login body! ${responseString}`,
+              );
+              return CommonAppErrors.UnknownHttpError;
+            }
+          case 400:
+            console.error(`Bad request whilst registering. ${responseString}`);
+            return CommonHTTPErrors.BadRequest;
+          case 500:
+            console.error(`Server error whilst logging in ${responseString}!`);
+            return CommonHTTPErrors.Server_Error;
+          default:
+            console.error(`Unknown error whilst logging in! ${responseString}`);
+            return CommonAppErrors.UnknownHttpError;
+        }
+      })
+      .catch(error => {
+        console.error(`Unknown error whilst logging in! ${error}`);
+        return CommonAppErrors.UnknownHttpError;
+      });
   }
 
   static logout(): Success | CommonHTTPErrors {

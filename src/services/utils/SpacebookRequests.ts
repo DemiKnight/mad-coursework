@@ -9,7 +9,7 @@ export enum CommonHTTPErrors {
 export enum CommonAppErrors {
   TokenNotFound,
 
-  UnknownError,
+  UnknownHttpError,
 }
 
 export const _Success = true;
@@ -21,28 +21,29 @@ export type LoginRequest = {
   password: string;
 };
 export class LoginResponse {
-  session_token?: string;
-  user_id?: number;
+  session_token!: string;
+  user_id!: number;
 }
 
 export type LoginError =
   | 'Invalid'
   | CommonHTTPErrors.Server_Error
-  | CommonAppErrors.UnknownError;
+  | CommonAppErrors.UnknownHttpError;
 
 // Logout
 
 // Register
 export type RegisterRequest = {
   email: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   password: string;
 };
 
-export type RegisterResponse = {
-  user_id: number;
-};
+export class RegisterResponse {
+  user_id!: number;
+}
 export type RegisterErrors =
   | CommonHTTPErrors.BadRequest
-  | CommonHTTPErrors.Server_Error;
+  | CommonHTTPErrors.Server_Error
+  | CommonAppErrors.UnknownHttpError;

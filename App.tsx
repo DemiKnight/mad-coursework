@@ -5,6 +5,12 @@ import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
 import {SpacebookClient} from './src/services/utils/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
+import {
+  LoginError,
+  LoginResponse,
+  RegisterErrors,
+  RegisterResponse,
+} from './src/services/utils/SpacebookRequests';
 
 export type RootStackParams = {
   Login: undefined;
@@ -13,13 +19,16 @@ export type RootStackParams = {
 const Stack = createNativeStackNavigator<RootStackParams>();
 
 export type AuthContextT = {
-  signIn: (username: string, password: string) => Promise<{token: string}>;
+  signIn: (
+    username: string,
+    password: string,
+  ) => Promise<LoginResponse | LoginError>;
   signUp: (
     email: string,
     firstName: string,
     lastName: string,
     password: string,
-  ) => Promise<{token: string}>;
+  ) => Promise<RegisterResponse | RegisterErrors>;
   signOut: () => void;
 };
 
@@ -53,23 +62,24 @@ const App = () => {
 
   const authContext = React.useMemo<AuthContextT>(
     () => ({
-      signIn: (username, password) => {
-        // console.log(username + password);
-        const potentialToken = SpacebookClient.login(username, password);
-
-        setState(prev => ({...prev, userToken: `${username}${password}`}));
-        return Promise.resolve({token: 'xx'});
+      signIn: async (username, password) => {
+        const potentialToken: LoginResponse | LoginError =
+          await SpacebookClient.login(username, password);
+        if (potentialToken instanceof LoginResponse) {
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: potentialToken.session_token,
+            }));
+          }, 100);
+        }
+        return potentialToken; //Promise.resolve({token: 'xx'});
       },
-      signUp: (email, firstName, lastName, password) => {
-        const potentialToken = SpacebookClient.register(
-          email,
-          firstName,
-          lastName,
-          password,
-        );
+      signUp: async (email, firstName, lastName, password) => {
+        const potentialToken: RegisterResponse | RegisterErrors =
+          await SpacebookClient.register(email, firstName, lastName, password);
 
-        // TOdo
-        return Promise.resolve({token: 'xx'});
+        return potentialToken;
       },
       signOut: () => {},
     }),
