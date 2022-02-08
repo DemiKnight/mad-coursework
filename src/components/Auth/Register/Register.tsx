@@ -40,7 +40,10 @@ export const Register = ({navigation}: RegisterProps) => {
     const result = await fn;
     setIsLoading(false);
     if (result.intendedResult !== undefined) {
-      navigation.navigate('Login');
+      navigation.navigate('Login', {
+        initialUsername: email,
+        initialPassword: password,
+      });
     } else if (result === CommonHTTPErrors.BadRequest) {
       setError('Issue with Username & Password');
     } else {
@@ -53,6 +56,8 @@ export const Register = ({navigation}: RegisterProps) => {
       {error !== undefined ? <Text>{error}</Text> : <></>}
       <Text>Email</Text>
       <TextInput
+        editable={!isLoading}
+        selectTextOnFocus={!isLoading}
         autoCapitalize="none"
         style={styles.input}
         value={email}
@@ -60,6 +65,8 @@ export const Register = ({navigation}: RegisterProps) => {
       />
       <Text>First name</Text>
       <TextInput
+        editable={!isLoading}
+        selectTextOnFocus={!isLoading}
         autoCapitalize="words"
         style={styles.input}
         value={firstName}
@@ -67,6 +74,8 @@ export const Register = ({navigation}: RegisterProps) => {
       />
       <Text>Last name</Text>
       <TextInput
+        editable={!isLoading}
+        selectTextOnFocus={!isLoading}
         autoCapitalize="words"
         style={styles.input}
         value={lastName}
@@ -74,13 +83,15 @@ export const Register = ({navigation}: RegisterProps) => {
       />
       <Text>Password</Text>
       <TextInput
+        editable={!isLoading}
+        selectTextOnFocus={!isLoading}
         style={styles.input}
         value={password}
         onChangeText={setPassword}
       />
       <Button
         title="Sign up"
-        disabled={!isSubmitDisabled}
+        disabled={!isSubmitDisabled || isLoading}
         onPress={() => {
           setError('');
           setIsLoading(true);

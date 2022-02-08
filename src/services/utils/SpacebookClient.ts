@@ -115,7 +115,7 @@ export class SpacebookClient {
       'login',
       Verbs.POST,
       {
-        username: username,
+        email: username,
         password: password,
       },
       undefined,
@@ -206,7 +206,7 @@ export class SpacebookClient {
       });
   }
 
-  static logout(): Success | CommonHTTPErrors {
+  static async logout(): Promise<Handler<Success, CommonHTTPErrors>> {
     return true;
   }
 }

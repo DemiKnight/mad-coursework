@@ -65,13 +65,15 @@ const App = () => {
       signIn: async (username, password) => {
         const potentialToken: Handler<LoginResponse, LoginError> =
           await SpacebookClient.login(username, password);
+        console.log(`Handling Sign in ${JSON.stringify(potentialToken)}`);
 
         if (potentialToken.intendedResult !== undefined) {
+          console.log('Intended result was defined');
           const result: LoginResponse = potentialToken.intendedResult;
           setTimeout(() => {
             setState(prev => ({
               ...prev,
-              userToken: result.session_token,
+              userToken: result.token,
             }));
           }, 100);
         }
@@ -83,7 +85,9 @@ const App = () => {
 
         return potentialToken;
       },
-      signOut: () => {},
+      signOut: async () => {
+        const signoutResult = await SpacebookClient.logout();
+      },
     }),
     [],
   );

@@ -18,12 +18,12 @@ export type Success = typeof _Success;
 
 // Login
 export type LoginRequest = {
-  username: string;
+  email: string;
   password: string;
 };
 export class LoginResponse {
-  session_token!: string;
-  user_id!: number;
+  token!: string;
+  id!: number;
 }
 
 export type LoginError =
