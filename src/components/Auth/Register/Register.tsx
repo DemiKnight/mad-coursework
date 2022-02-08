@@ -4,9 +4,11 @@ import {AuthContext} from '../../../../App';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParams} from '../Auth';
 import {
+  CommonHTTPErrors,
   RegisterErrors,
   RegisterResponse,
 } from '../../../services/utils/SpacebookRequests';
+import {ResponseX} from '../../../services/utils/SpacebookClient';
 
 type RegisterProps = NativeStackScreenProps<AuthStackParams, 'Register'>;
 
@@ -17,8 +19,6 @@ export const Register = ({navigation}: RegisterProps) => {
   const [password, setPassword] = React.useState<string>('');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
-  const [registerRequest, setRegisterRequest] =
-    React.useState<Promise<RegisterResponse | RegisterErrors>>(); // Use ReturnType<> from typescript
 
   const {signUp} = React.useContext(AuthContext);
 
@@ -34,20 +34,19 @@ export const Register = ({navigation}: RegisterProps) => {
     [firstName, lastName, password, email],
   );
 
-  React.useEffect(() => {
-    if (registerRequest !== undefined) {
-      setIsLoading(false);
-      const handleRegisterRequest = async () => {
-        const result: RegisterResponse | RegisterErrors = await registerRequest;
-        if (result instanceof RegisterResponse) {
-          navigation.navigate('Login'); // TODO Pass username & password?
-        } else {
-          setError(`Issue whilst registering: ${result}`);
-        }
-      };
-      handleRegisterRequest();
+  const handleResponse = async (
+    fn: Promise<ResponseX<RegisterResponse, RegisterErrors>>,
+  ) => {
+    const result = await fn;
+    setIsLoading(false);
+    if (result.intendedResult !== undefined) {
+      navigation.navigate('Login');
+    } else if (result === CommonHTTPErrors.BadRequest) {
+      setError('Issue with Username & Password');
+    } else {
+      setError('Unknown error occurred, please try again.');
     }
-  }, [registerRequest, navigation]);
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -83,8 +82,9 @@ export const Register = ({navigation}: RegisterProps) => {
         title="Sign up"
         disabled={!isSubmitDisabled}
         onPress={() => {
+          setError('');
           setIsLoading(true);
-          setRegisterRequest(signUp(email, firstName, lastName, password));
+          handleResponse(signUp(email, firstName, lastName, password));
         }}
       />
       {isLoading ? <Text>Loading...</Text> : <></>}

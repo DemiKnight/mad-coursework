@@ -1,4 +1,5 @@
 // General Errors
+
 export enum CommonHTTPErrors {
   Server_Error,
   Unauthorised,
@@ -41,7 +42,7 @@ export type RegisterRequest = {
 };
 
 export class RegisterResponse {
-  user_id!: number;
+  id!: number;
 }
 export type RegisterErrors =
   | CommonHTTPErrors.BadRequest

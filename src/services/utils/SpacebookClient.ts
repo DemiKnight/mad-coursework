@@ -18,6 +18,18 @@ export enum Verbs {
   DELETE = 'DELETE',
 }
 
+export type ResponseX<T, Err> = {
+  intendedResult?: T;
+  errors?: Err;
+};
+
+function errorResp<T, Err>(error: Err): ResponseX<T, Err> {
+  return {errors: error};
+}
+function ok<T, Err>(result: T): ResponseX<T, Err> {
+  return {intendedResult: result};
+}
+
 export class SpacebookClient {
   private static baseURL: string = 'http://localhost:3333/api/1.0.0/';
 
@@ -148,7 +160,7 @@ export class SpacebookClient {
     firstName: string,
     last_name: string,
     password: string,
-  ): Promise<RegisterResponse | RegisterErrors> {
+  ): Promise<ResponseX<RegisterResponse, RegisterErrors>> {
     const testRequest = await SpacebookClient.req<RegisterRequest>(
       'user',
       Verbs.POST,
@@ -166,29 +178,31 @@ export class SpacebookClient {
         const responseString = JSON.stringify(response);
         switch (response.status) {
           case 201: // created user successfully.
-            const body = await response.json();
-            if (body instanceof RegisterResponse) {
-              return body;
-            } else {
-              console.error(
-                `Issue when parsing successful login body! ${responseString}`,
-              );
-              return CommonAppErrors.UnknownHttpError;
-            }
+            const body: RegisterResponse = await response.json();
+            console.log(body);
+            return ok<RegisterResponse, RegisterErrors>(body);
           case 400:
             console.error(`Bad request whilst registering. ${responseString}`);
-            return CommonHTTPErrors.BadRequest;
+            return errorResp<RegisterResponse, RegisterErrors>(
+              CommonHTTPErrors.BadRequest,
+            );
           case 500:
             console.error(`Server error whilst logging in ${responseString}!`);
-            return CommonHTTPErrors.Server_Error;
+            return errorResp<RegisterResponse, RegisterErrors>(
+              CommonHTTPErrors.Server_Error,
+            );
           default:
             console.error(`Unknown error whilst logging in! ${responseString}`);
-            return CommonAppErrors.UnknownHttpError;
+            return errorResp<RegisterResponse, RegisterErrors>(
+              CommonAppErrors.UnknownHttpError,
+            );
         }
       })
       .catch(error => {
         console.error(`Unknown error whilst logging in! ${error}`);
-        return CommonAppErrors.UnknownHttpError;
+        return errorResp<RegisterResponse, RegisterErrors>(
+          CommonAppErrors.UnknownHttpError,
+        );
       });
   }
 

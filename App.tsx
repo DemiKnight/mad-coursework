@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
-import {SpacebookClient} from './src/services/utils/SpacebookClient';
+import {ResponseX, SpacebookClient} from './src/services/utils/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
 import {
   LoginError,
@@ -28,7 +28,7 @@ export type AuthContextT = {
     firstName: string,
     lastName: string,
     password: string,
-  ) => Promise<RegisterResponse | RegisterErrors>;
+  ) => Promise<ResponseX<RegisterResponse, RegisterErrors>>;
   signOut: () => void;
 };
 
@@ -73,10 +73,10 @@ const App = () => {
             }));
           }, 100);
         }
-        return potentialToken; //Promise.resolve({token: 'xx'});
+        return potentialToken;
       },
       signUp: async (email, firstName, lastName, password) => {
-        const potentialToken: RegisterResponse | RegisterErrors =
+        const potentialToken: ResponseX<RegisterResponse, RegisterErrors> =
           await SpacebookClient.register(email, firstName, lastName, password);
 
         return potentialToken;
