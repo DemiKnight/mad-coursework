@@ -87,7 +87,7 @@ export class SpacebookClient {
     const finalRequestDetails = {
       method: verb,
       headers: headersToInclude,
-      body: requestBody,
+      body: JSON.stringify(requestBody),
     } as RequestInit;
 
     console.log(fullURL);
