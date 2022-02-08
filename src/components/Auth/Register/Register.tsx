@@ -8,7 +8,7 @@ import {
   RegisterErrors,
   RegisterResponse,
 } from '../../../services/utils/SpacebookRequests';
-import {ResponseX} from '../../../services/utils/SpacebookClient';
+import {Handler} from '../../../services/utils/SpacebookClient';
 
 type RegisterProps = NativeStackScreenProps<AuthStackParams, 'Register'>;
 
@@ -35,7 +35,7 @@ export const Register = ({navigation}: RegisterProps) => {
   );
 
   const handleResponse = async (
-    fn: Promise<ResponseX<RegisterResponse, RegisterErrors>>,
+    fn: Promise<Handler<RegisterResponse, RegisterErrors>>,
   ) => {
     const result = await fn;
     setIsLoading(false);

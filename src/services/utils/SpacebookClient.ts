@@ -18,15 +18,15 @@ export enum Verbs {
   DELETE = 'DELETE',
 }
 
-export type ResponseX<T, Err> = {
+export type Handler<T, Err> = {
   intendedResult?: T;
   errors?: Err;
 };
 
-function errorResp<T, Err>(error: Err): ResponseX<T, Err> {
+function errorResp<T, Err>(error: Err): Handler<T, Err> {
   return {errors: error};
 }
-function ok<T, Err>(result: T): ResponseX<T, Err> {
+function ok<T, Err>(result: T): Handler<T, Err> {
   return {intendedResult: result};
 }
 
@@ -110,7 +110,7 @@ export class SpacebookClient {
   static async login(
     username: string,
     password: string,
-  ): Promise<LoginResponse | LoginError> {
+  ): Promise<Handler<LoginResponse, LoginError>> {
     const testRequest: Request = await SpacebookClient.req<LoginRequest>(
       'login',
       Verbs.POST,
@@ -124,34 +124,34 @@ export class SpacebookClient {
     console.log(testRequest);
     return fetch(testRequest)
       .then(async (response: Response) => {
-        const body = await response.json();
+        const responseStr: string = JSON.stringify(response);
         switch (response.status) {
           case 200:
+            const body: LoginResponse = await response.json();
             console.log('Successful login');
-            if (body instanceof LoginResponse) {
-              return body;
-            } else {
-              console.error(
-                `Issue when parsing successful login body! ${body}`,
-              );
-              return 'Invalid';
-            }
+            return ok<LoginResponse, LoginError>(body);
           case 400:
             console.log(
-              `Error whilst logging in: Invalid username/password! ${body}`,
+              `Error whilst logging in: Invalid username/password! ${responseStr}`,
             );
-            return 'Invalid';
+            return errorResp<LoginResponse, LoginError>('Invalid');
           case 500:
-            console.error(`Server error whilst logging in ${body}!`);
-            return CommonHTTPErrors.Server_Error;
+            console.error(`Server error whilst logging in ${responseStr}!`);
+            return errorResp<LoginResponse, LoginError>(
+              CommonHTTPErrors.Server_Error,
+            );
           default:
-            console.error(`Unknown error whilst logging in! ${body}`);
-            return CommonAppErrors.UnknownHttpError;
+            console.error(`Unknown error whilst logging in! ${responseStr}`);
+            return errorResp<LoginResponse, LoginError>(
+              CommonAppErrors.UnknownHttpError,
+            );
         }
       })
       .catch(error => {
         console.error(`Unknown error whilst logging in! ${error}`);
-        return CommonAppErrors.UnknownHttpError;
+        return errorResp<LoginResponse, LoginError>(
+          CommonAppErrors.UnknownHttpError,
+        );
       });
   }
 
@@ -160,7 +160,7 @@ export class SpacebookClient {
     firstName: string,
     last_name: string,
     password: string,
-  ): Promise<ResponseX<RegisterResponse, RegisterErrors>> {
+  ): Promise<Handler<RegisterResponse, RegisterErrors>> {
     const testRequest = await SpacebookClient.req<RegisterRequest>(
       'user',
       Verbs.POST,

@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
-import {ResponseX, SpacebookClient} from './src/services/utils/SpacebookClient';
+import {Handler, SpacebookClient} from './src/services/utils/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
 import {
   LoginError,
@@ -22,13 +22,13 @@ export type AuthContextT = {
   signIn: (
     username: string,
     password: string,
-  ) => Promise<LoginResponse | LoginError>;
+  ) => Promise<Handler<LoginResponse, LoginError>>;
   signUp: (
     email: string,
     firstName: string,
     lastName: string,
     password: string,
-  ) => Promise<ResponseX<RegisterResponse, RegisterErrors>>;
+  ) => Promise<Handler<RegisterResponse, RegisterErrors>>;
   signOut: () => void;
 };
 
@@ -63,20 +63,22 @@ const App = () => {
   const authContext = React.useMemo<AuthContextT>(
     () => ({
       signIn: async (username, password) => {
-        const potentialToken: LoginResponse | LoginError =
+        const potentialToken: Handler<LoginResponse, LoginError> =
           await SpacebookClient.login(username, password);
-        if (potentialToken instanceof LoginResponse) {
+
+        if (potentialToken.intendedResult !== undefined) {
+          const result: LoginResponse = potentialToken.intendedResult;
           setTimeout(() => {
             setState(prev => ({
               ...prev,
-              userToken: potentialToken.session_token,
+              userToken: result.session_token,
             }));
           }, 100);
         }
         return potentialToken;
       },
       signUp: async (email, firstName, lastName, password) => {
-        const potentialToken: ResponseX<RegisterResponse, RegisterErrors> =
+        const potentialToken: Handler<RegisterResponse, RegisterErrors> =
           await SpacebookClient.register(email, firstName, lastName, password);
 
         return potentialToken;
