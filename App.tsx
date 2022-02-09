@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler, SpacebookClient} from './src/services/utils/SpacebookClient';
@@ -11,12 +10,18 @@ import {
   RegisterErrors,
   RegisterResponse,
 } from './src/services/utils/SpacebookRequests';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {TimelineScreen} from './src/components/TimelineScreen';
+import {SettingsScreen} from './src/components/SettingsScreen';
+import {FriendsListScreen} from './src/components/FriendsListScreen';
 
 export type RootStackParams = {
-  Login: undefined;
   Home: undefined;
+  Timeline: undefined;
+  Settings: undefined;
+  Friends: undefined;
 };
-const Stack = createNativeStackNavigator<RootStackParams>();
+const TabNav = createBottomTabNavigator<RootStackParams>();
 
 export type AuthContextT = {
   signIn: (
@@ -125,13 +130,19 @@ const App = () => {
     [],
   );
 
+  // @ts-ignore
+  console.info(`Is Hermes enabled? ${!!global.HermesInternal}`);
+
   return (
     <NavigationContainer>
       <AuthContext.Provider value={authContext}>
         {state.userToken !== undefined ? (
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={Home} />
-          </Stack.Navigator>
+          <TabNav.Navigator initialRouteName="Home">
+            <TabNav.Screen name="Home" component={Home} />
+            <TabNav.Screen name="Timeline" component={TimelineScreen} />
+            <TabNav.Screen name="Friends" component={FriendsListScreen} />
+            <TabNav.Screen name="Settings" component={SettingsScreen} />
+          </TabNav.Navigator>
         ) : (
           <Auth />
         )}
