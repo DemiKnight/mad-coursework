@@ -14,7 +14,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {TimelineScreen} from './src/components/TimelineScreen';
 import {SettingsScreen} from './src/components/SettingsScreen';
 import {FriendsListScreen} from './src/components/FriendsListScreen';
-
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 export type RootStackParams = {
   Home: undefined;
   Timeline: undefined;
@@ -134,20 +134,22 @@ const App = () => {
   console.info(`Is Hermes enabled? ${!!global.HermesInternal}`);
 
   return (
-    <NavigationContainer>
-      <AuthContext.Provider value={authContext}>
-        {state.userToken !== undefined ? (
-          <TabNav.Navigator initialRouteName="Home">
-            <TabNav.Screen name="Home" component={Home} />
-            <TabNav.Screen name="Timeline" component={TimelineScreen} />
-            <TabNav.Screen name="Friends" component={FriendsListScreen} />
-            <TabNav.Screen name="Settings" component={SettingsScreen} />
-          </TabNav.Navigator>
-        ) : (
-          <Auth />
-        )}
-      </AuthContext.Provider>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <AuthContext.Provider value={authContext}>
+          {state.userToken !== undefined ? (
+            <TabNav.Navigator initialRouteName="Home">
+              <TabNav.Screen name="Home" component={Home} />
+              <TabNav.Screen name="Timeline" component={TimelineScreen} />
+              <TabNav.Screen name="Friends" component={FriendsListScreen} />
+              <TabNav.Screen name="Settings" component={SettingsScreen} />
+            </TabNav.Navigator>
+          ) : (
+            <Auth />
+          )}
+        </AuthContext.Provider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 

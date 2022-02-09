@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, Text} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthContext, RootStackParams} from '../../../App';
+import {Button} from 'react-native-elements';
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParams, 'Home'>;
 export const Home = ({navigation}: HomeScreenProps) => {
