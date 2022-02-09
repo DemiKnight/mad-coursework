@@ -70,6 +70,11 @@ const App = () => {
         if (potentialToken.intendedResult !== undefined) {
           console.log('Intended result was defined');
           const result: LoginResponse = potentialToken.intendedResult;
+          Keychain.setGenericPassword(
+            String(potentialToken.intendedResult.id),
+            potentialToken.intendedResult.token,
+          );
+
           setTimeout(() => {
             setState(prev => ({
               ...prev,
@@ -86,7 +91,18 @@ const App = () => {
         return potentialToken;
       },
       signOut: async () => {
+        console.log('Attempting signout');
         const signoutResult = await SpacebookClient.logout();
+        if (signoutResult.intendedResult !== undefined) {
+          console.log('Signout successful');
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
+        }
+        return signoutResult;
       },
     }),
     [],

@@ -5,8 +5,9 @@ import {Register} from './Register/Register';
 
 export type AuthStackParams = {
   Login: {
-    initialUsername: string;
+    initialEmail: string;
     initialPassword: string;
+    attemptLogin: boolean;
   };
   Register: undefined;
 };
@@ -19,7 +20,11 @@ export const Auth = () => {
       <AuthStack.Screen
         name="Login"
         component={Login}
-        initialParams={{initialUsername: '', initialPassword: ''}}
+        initialParams={{
+          initialEmail: '',
+          initialPassword: '',
+          attemptLogin: false,
+        }}
       />
       <AuthStack.Screen name="Register" component={Register} />
     </AuthStack.Navigator>

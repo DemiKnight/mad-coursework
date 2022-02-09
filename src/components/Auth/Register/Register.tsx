@@ -41,8 +41,9 @@ export const Register = ({navigation}: RegisterProps) => {
     setIsLoading(false);
     if (result.intendedResult !== undefined) {
       navigation.navigate('Login', {
-        initialUsername: email,
+        initialEmail: email,
         initialPassword: password,
+        attemptLogin: true,
       });
     } else if (result === CommonHTTPErrors.BadRequest) {
       setError('Issue with Username & Password');

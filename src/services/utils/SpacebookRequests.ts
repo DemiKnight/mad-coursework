@@ -33,6 +33,11 @@ export type LoginError =
 
 // Logout
 
+export type LogoutError =
+  | CommonHTTPErrors.Unauthorised
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error;
+
 // Register
 export type RegisterRequest = {
   email: string;

@@ -4,6 +4,7 @@ import {
   LoginError,
   LoginRequest,
   LoginResponse,
+  LogoutError,
   RegisterErrors,
   RegisterRequest,
   RegisterResponse,
@@ -206,7 +207,31 @@ export class SpacebookClient {
       });
   }
 
-  static async logout(): Promise<Handler<Success, CommonHTTPErrors>> {
-    return true;
+  static async logout(): Promise<Handler<Success, LogoutError>> {
+    const request = await this.req('logout', Verbs.POST, {});
+
+    return fetch(request)
+      .then(async (response: Response) => {
+        const responseString = JSON.stringify(response);
+        switch (response.status) {
+          case 200:
+            console.log('Successfully loggedout...');
+            return ok<Success, LogoutError>(true);
+          case 400:
+            console.error();
+            return errorResp<Success, LogoutError>(
+              CommonHTTPErrors.Unauthorised,
+            );
+          default:
+            console.error(`Unknown error whilst logging in! ${responseString}`);
+            return errorResp<Success, LogoutError>(
+              CommonAppErrors.UnknownHttpError,
+            );
+        }
+      })
+      .catch(error => {
+        console.log(`Unexpect error occurred whilst logging out ${error}`);
+        return errorResp<Success, LogoutError>(CommonHTTPErrors.Server_Error);
+      });
   }
 }

@@ -1,35 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, TextInput} from 'react-native';
 import {AuthContext} from '../../../../App';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParams} from '../Auth';
-import {Handler} from '../../../services/utils/SpacebookClient';
-import {
-  RegisterErrors,
-  RegisterResponse,
-} from '../../../services/utils/SpacebookRequests';
-
-type LoginProps = {
-  initialUsername?: string;
-  initialPassword?: string;
-};
 
 type LoginNavProps = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
 export const Login = ({route, navigation}: LoginNavProps) => {
-  const {initialUsername, initialPassword}: LoginProps = route.params;
-  const [email, setEmail] = React.useState<string>(initialUsername);
-  const [password, setPassword] = React.useState<string>(initialPassword);
+  const [email, setEmail] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const {signIn} = React.useContext(AuthContext);
 
-  const handleResponse = async (
-    fn: Promise<Handler<RegisterResponse, RegisterErrors>>,
-  ) => {
-    const result = await fn;
-    if (result.intendedResult !== undefined) {
+  useEffect(() => {
+    setEmail(route.params.initialEmail);
+    setPassword(route.params.initialPassword);
+  }, [route.params.initialEmail, route.params.initialPassword]);
+
+  useEffect(() => {
+    if (route.params.attemptLogin) {
+      signIn(email, password);
     }
-  };
+  }, [route.params.attemptLogin, email, password, signIn]);
+
+  console.log(isLoading);
+  console.log(
+    `e '${email}' p '${password}' | ie ${route.params.initialEmail} p '${route.params.initialPassword}'`,
+  );
 
   // todo improve or use third-party library
   const isSubmitDisabled = React.useMemo<boolean>(
@@ -40,8 +38,16 @@ export const Login = ({route, navigation}: LoginNavProps) => {
   return (
     <SafeAreaView>
       <Text>Login</Text>
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} />
       <TextInput
+        // editable={!isLoading}
+        // selectTextOnFocus={!isLoading}
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        // editable={!isLoading}
+        // selectTextOnFocus={!isLoading}
         style={styles.input}
         value={password}
         onChangeText={setPassword}
@@ -49,7 +55,10 @@ export const Login = ({route, navigation}: LoginNavProps) => {
       <Button
         disabled={!isSubmitDisabled}
         title="Sign in"
-        onPress={() => signIn(email, password)}
+        onPress={() => {
+          setIsLoading(true);
+          signIn(email, password);
+        }}
       />
       <Button
         title="To Register"
