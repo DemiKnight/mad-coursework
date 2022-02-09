@@ -81,6 +81,14 @@ const App = () => {
               userToken: result.token,
             }));
           }, 100);
+        } else {
+          Keychain.resetGenericPassword();
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
         }
         return potentialToken;
       },
@@ -95,6 +103,15 @@ const App = () => {
         const signoutResult = await SpacebookClient.logout();
         if (signoutResult.intendedResult !== undefined) {
           console.log('Signout successful');
+          Keychain.resetGenericPassword();
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
+        } else {
+          Keychain.resetGenericPassword();
           setTimeout(() => {
             setState(prev => ({
               ...prev,
