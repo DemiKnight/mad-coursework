@@ -24,11 +24,6 @@ export const Login = ({route, navigation}: LoginNavProps) => {
     }
   }, [route.params.attemptLogin, email, password, signIn]);
 
-  console.log(isLoading);
-  console.log(
-    `e '${email}' p '${password}' | ie ${route.params.initialEmail} p '${route.params.initialPassword}'`,
-  );
-
   // todo improve or use third-party library
   const isSubmitDisabled = React.useMemo<boolean>(
     () => email !== '' && password !== '' && email?.includes('@'),
