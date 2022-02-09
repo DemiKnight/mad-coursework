@@ -1,124 +1,143 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react';
-import {
-  SafeAreaView,
-  // ScrollView,
-  // StatusBar,
-  // StyleSheet,
-  Text,
-  // useColorScheme,
-  // View,
-} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Home} from './src/components/Home/Home';
+import {Auth} from './src/components/Auth/Auth';
+import {Handler, SpacebookClient} from './src/services/utils/SpacebookClient';
+import Keychain, {UserCredentials} from 'react-native-keychain';
+import {
+  LoginError,
+  LoginResponse,
+  RegisterErrors,
+  RegisterResponse,
+} from './src/services/utils/SpacebookRequests';
 
-// const Section: React.FC<{
-//   title: string;
-// }> = ({children, title}) => {
-//   const isDarkMode = useColorScheme() === 'dark';
-//   return (
-//     <View style={styles.sectionContainer}>
-//       <Text
-//         style={[
-//           styles.sectionTitle,
-//           {
-//             color: isDarkMode ? Colors.white : Colors.black,
-//           },
-//         ]}>
-//         {title}
-//       </Text>
-//       <Text
-//         style={[
-//           styles.sectionDescription,
-//           {
-//             color: isDarkMode ? Colors.light : Colors.dark,
-//           },
-//         ]}>
-//         {children}
-//       </Text>
-//     </View>
-//   );
-// };
+export type RootStackParams = {
+  Login: undefined;
+  Home: undefined;
+};
+const Stack = createNativeStackNavigator<RootStackParams>();
 
-const Stack = createNativeStackNavigator();
-
-const HomeScreen = () => {
-  return (
-    <SafeAreaView>
-      <Text>Home</Text>
-    </SafeAreaView>
-  );
+export type AuthContextT = {
+  signIn: (
+    username: string,
+    password: string,
+  ) => Promise<Handler<LoginResponse, LoginError>>;
+  signUp: (
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string,
+  ) => Promise<Handler<RegisterResponse, RegisterErrors>>;
+  signOut: () => void;
 };
 
-const App = () => {
-  // const isDarkMode = useColorScheme() === 'dark';
+export const AuthContext = React.createContext({} as AuthContextT);
 
-  // const backgroundStyle = {
-  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  // };
+type AppProps = {
+  isLoading?: boolean;
+  isSignout?: boolean;
+  userToken?: string;
+};
+const App = () => {
+  const [state, setState] = React.useState<AppProps>({
+    isLoading: true,
+    isSignout: false,
+  });
+
+  React.useEffect(() => {
+    const obtainAuthToken = async () => {
+      const store: false | UserCredentials =
+        await Keychain.getGenericPassword();
+      setState(prev => {
+        return {
+          ...prev,
+          userToken: store === false ? undefined : store.password,
+        };
+      });
+    };
+
+    obtainAuthToken();
+  }, []);
+
+  const authContext = React.useMemo<AuthContextT>(
+    () => ({
+      signIn: async (username, password) => {
+        const potentialToken: Handler<LoginResponse, LoginError> =
+          await SpacebookClient.login(username, password);
+        console.log(`Handling Sign in ${JSON.stringify(potentialToken)}`);
+
+        if (potentialToken.intendedResult !== undefined) {
+          console.log('Intended result was defined');
+          const result: LoginResponse = potentialToken.intendedResult;
+          Keychain.setGenericPassword(
+            String(potentialToken.intendedResult.id),
+            potentialToken.intendedResult.token,
+          );
+
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: result.token,
+            }));
+          }, 100);
+        } else {
+          Keychain.resetGenericPassword();
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
+        }
+        return potentialToken;
+      },
+      signUp: async (email, firstName, lastName, password) => {
+        const potentialToken: Handler<RegisterResponse, RegisterErrors> =
+          await SpacebookClient.register(email, firstName, lastName, password);
+
+        return potentialToken;
+      },
+      signOut: async () => {
+        console.log('Attempting signout');
+        const signoutResult = await SpacebookClient.logout();
+        if (signoutResult.intendedResult !== undefined) {
+          console.log('Signout successful');
+          Keychain.resetGenericPassword();
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
+        } else {
+          Keychain.resetGenericPassword();
+          setTimeout(() => {
+            setState(prev => ({
+              ...prev,
+              userToken: undefined,
+            }));
+          }, 100);
+        }
+        return signoutResult;
+      },
+    }),
+    [],
+  );
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-      {/*<SafeAreaView style={backgroundStyle}>*/}
-      {/*  <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />*/}
-      {/*  <ScrollView*/}
-      {/*    contentInsetAdjustmentBehavior="automatic"*/}
-      {/*    style={backgroundStyle}>*/}
-      {/*    <Header />*/}
-      {/*    <View*/}
-      {/*      style={{*/}
-      {/*        backgroundColor: isDarkMode ? Colors.black : Colors.white,*/}
-      {/*      }}>*/}
-      {/*      <Section title="Step One">*/}
-      {/*        Edit <Text style={styles.highlight}>App.tsx</Text> to change this*/}
-      {/*        screen and then come back to see your edits.*/}
-      {/*      </Section>*/}
-      {/*      <Section title="See Your Changes">*/}
-      {/*        <ReloadInstructions />*/}
-      {/*      </Section>*/}
-      {/*      <Section title="Debug">*/}
-      {/*        <DebugInstructions />*/}
-      {/*      </Section>*/}
-      {/*      <Section title="Learn More">*/}
-      {/*        Read the docs to discover what to do next:*/}
-      {/*      </Section>*/}
-      {/*      <LearnMoreLinks />*/}
-      {/*    </View>*/}
-      {/*  </ScrollView>*/}
-      {/*</SafeAreaView>*/}
+      <AuthContext.Provider value={authContext}>
+        {state.userToken !== undefined ? (
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={Home} />
+          </Stack.Navigator>
+        ) : (
+          <Auth />
+        )}
+      </AuthContext.Provider>
     </NavigationContainer>
   );
 };
-
-// const styles = StyleSheet.create({
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-// });
 
 export default App;
