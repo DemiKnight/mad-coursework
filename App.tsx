@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Home} from './src/components/Home/Home';
 import {Auth} from './src/components/Auth/Auth';
-import {Handler, SpacebookClient} from './src/services/utils/SpacebookClient';
+import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
 import {
   LoginError,
@@ -15,6 +15,7 @@ import {TimelineScreen} from './src/components/TimelineScreen';
 import {SettingsScreen} from './src/components/SettingsScreen';
 import {FriendsListScreen} from './src/components/FriendsListScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {login, logout, register} from './src/api/Auth';
 export type RootStackParams = {
   Home: undefined;
   Timeline: undefined;
@@ -68,8 +69,10 @@ const App = () => {
   const authContext = React.useMemo<AuthContextT>(
     () => ({
       signIn: async (username, password) => {
-        const potentialToken: Handler<LoginResponse, LoginError> =
-          await SpacebookClient.login(username, password);
+        const potentialToken: Handler<LoginResponse, LoginError> = await login(
+          username,
+          password,
+        );
         console.log(`Handling Sign in ${JSON.stringify(potentialToken)}`);
 
         if (potentialToken.intendedResult !== undefined) {
@@ -99,13 +102,13 @@ const App = () => {
       },
       signUp: async (email, firstName, lastName, password) => {
         const potentialToken: Handler<RegisterResponse, RegisterErrors> =
-          await SpacebookClient.register(email, firstName, lastName, password);
+          await register(email, firstName, lastName, password);
 
         return potentialToken;
       },
       signOut: async () => {
         console.log('Attempting signout');
-        const signoutResult = await SpacebookClient.logout();
+        const signoutResult = await logout();
         if (signoutResult.intendedResult !== undefined) {
           console.log('Signout successful');
           Keychain.resetGenericPassword();

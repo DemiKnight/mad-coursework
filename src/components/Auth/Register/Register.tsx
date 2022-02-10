@@ -8,7 +8,7 @@ import {
   RegisterErrors,
   RegisterResponse,
 } from '../../../services/utils/SpacebookRequests';
-import {Handler} from '../../../services/utils/SpacebookClient';
+import {Handler} from '../../../api/SpacebookClient';
 
 type RegisterProps = NativeStackScreenProps<AuthStackParams, 'Register'>;
 
