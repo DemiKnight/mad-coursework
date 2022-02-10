@@ -28,13 +28,13 @@ export type AuthContextT = {
   signIn: (
     username: string,
     password: string,
-  ) => Promise<Handler<LoginResponse, LoginError>>;
+  ) => Promise<Handler<LoginError, LoginResponse>>;
   signUp: (
     email: string,
     firstName: string,
     lastName: string,
     password: string,
-  ) => Promise<Handler<RegisterResponse, RegisterErrors>>;
+  ) => Promise<Handler<RegisterErrors, RegisterResponse>>;
   signOut: () => void;
 };
 
@@ -69,7 +69,7 @@ const App = () => {
   const authContext = React.useMemo<AuthContextT>(
     () => ({
       signIn: async (username, password) => {
-        const potentialToken: Handler<LoginResponse, LoginError> = await login(
+        const potentialToken: Handler<LoginError, LoginResponse> = await login(
           username,
           password,
         );
@@ -101,7 +101,7 @@ const App = () => {
         return potentialToken;
       },
       signUp: async (email, firstName, lastName, password) => {
-        const potentialToken: Handler<RegisterResponse, RegisterErrors> =
+        const potentialToken: Handler<RegisterErrors, RegisterResponse> =
           await register(email, firstName, lastName, password);
 
         return potentialToken;

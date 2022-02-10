@@ -8,15 +8,15 @@ export enum Verbs {
   DELETE = 'DELETE',
 }
 
-export type Handler<T, Err> = {
+export type Handler<Err, T> = {
   intendedResult?: T;
   errors?: Err;
 };
 
-export function errorResp<T, Err>(error: Err): Handler<T, Err> {
+export function errorResp<Err, T>(error: Err): Handler<Err, T> {
   return {errors: error};
 }
-export function ok<T, Err>(result: T): Handler<T, Err> {
+export function ok<Err, T>(result: T): Handler<Err, T> {
   return {intendedResult: result};
 }
 
