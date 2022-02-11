@@ -53,3 +53,49 @@ export type RegisterErrors =
   | CommonHTTPErrors.BadRequest
   | CommonHTTPErrors.Server_Error
   | CommonAppErrors.UnknownHttpError;
+
+// Get friend requests
+
+export type GetFriendRequestsError =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.BadRequest;
+
+export type AcceptFriendRequestError =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonHTTPErrors.Unauthorised;
+
+// Friends list
+export type PublicUser = {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
+export type FriendsListErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonAppErrors.FriendListVisibility
+  | CommonHTTPErrors.Unauthorised;
+
+export type AddFriendErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonAppErrors.FriendAlreadyAdded
+  | CommonHTTPErrors.Unauthorised;
+
+// User management
+export type GetUserInfoErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Unauthorised;
+
+export type UserUpdateRequest = {
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  password?: string;
+};
