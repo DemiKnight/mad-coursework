@@ -4,6 +4,8 @@ import {
   CommonHTTPErrors,
   GetUserInfoErrors,
   PublicUser,
+  Success,
+  UserUpdateErrors,
   UserUpdateRequest,
 } from '../services/utils/SpacebookRequests';
 
@@ -42,7 +44,7 @@ export async function updateUserInfo(
   email?: string,
   firstName?: string,
   lastName?: string,
-) {
+): Promise<Handler<UserUpdateErrors, Success>> {
   console.info(`Update user information for ${userId}`);
   const requestBody: UserUpdateRequest = {
     email: email,
@@ -57,19 +59,28 @@ export async function updateUserInfo(
     requestBody,
   );
 
-  fetch(request).then(response => {
+  return fetch(request).then(response => {
     const responseStr = JSON.stringify(response);
 
     switch (response.status) {
       case 200:
+        console.info(`Successfully updated with following body ${responseStr}`);
         return ok(true);
       case 404:
-        console.error();
-        return errorResp();
+        console.error(`User id not found ${responseStr}`);
+        return errorResp(CommonHTTPErrors.NotFound);
       case 403:
+        console.error(`Forbidden when updating user ${responseStr}`);
+        return errorResp(CommonHTTPErrors.Forbidden);
       case 401:
+        console.error(`Unauthorised request for user ${userId} ${responseStr}`);
+        return errorResp(CommonHTTPErrors.Unauthorised);
       case 400:
+        console.error(`Bad Request ${responseStr}`);
+        return errorResp(CommonHTTPErrors.BadRequest);
       default:
+        console.error(`Unknown response from server ${responseStr}`);
+        return errorResp(CommonAppErrors.UnknownHttpError);
     }
   });
 }

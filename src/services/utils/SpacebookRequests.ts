@@ -3,6 +3,7 @@
 export enum CommonHTTPErrors {
   Server_Error,
   Unauthorised,
+  Forbidden,
   NotFound,
   BadRequest,
 }
@@ -92,6 +93,14 @@ export type AddFriendErrors =
 export type GetUserInfoErrors =
   | CommonHTTPErrors.Server_Error
   | CommonHTTPErrors.NotFound
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Unauthorised;
+
+export type UserUpdateErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonHTTPErrors.BadRequest
+  | CommonHTTPErrors.Forbidden
   | CommonAppErrors.UnknownHttpError
   | CommonHTTPErrors.Unauthorised;
 
