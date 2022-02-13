@@ -16,8 +16,10 @@ export enum CommonAppErrors {
   FriendAlreadyAdded,
 }
 
-export const _Success = true;
-export type Success = typeof _Success;
+export type SuccessT<T> = T;
+export type Success = SuccessT<boolean>;
+
+// export type Success = typeof _Success;
 
 // Login
 export type LoginRequest = {
@@ -110,3 +112,11 @@ export type UserUpdateRequest = {
   last_name?: string;
   password?: string;
 };
+
+// User profile picture
+export type ProfilePictureSuccess = SuccessT<string>;
+export type GetProfilePictureErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Unauthorised;
