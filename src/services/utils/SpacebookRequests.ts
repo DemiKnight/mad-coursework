@@ -11,6 +11,8 @@ export enum CommonAppErrors {
   TokenNotFound,
 
   UnknownHttpError,
+  FriendListVisibility,
+  FriendAlreadyAdded,
 }
 
 export const _Success = true;

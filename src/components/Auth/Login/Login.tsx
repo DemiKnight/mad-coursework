@@ -59,6 +59,7 @@ export const Login = ({route, navigation}: LoginNavProps) => {
         title="To Register"
         onPress={() => navigation.navigate('Register')}
       />
+      {isLoading ? <Text>Loading...</Text> : <></>}
     </SafeAreaView>
   );
 };

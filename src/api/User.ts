@@ -3,10 +3,7 @@ import {
   CommonAppErrors,
   CommonHTTPErrors,
   GetUserInfoErrors,
-  LogoutError,
   PublicUser,
-  RegisterRequest,
-  Success,
   UserUpdateRequest,
 } from '../services/utils/SpacebookRequests';
 
