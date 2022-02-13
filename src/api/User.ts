@@ -4,6 +4,7 @@ import {
   CommonHTTPErrors,
   GetProfilePictureErrors,
   GetUserInfoErrors,
+  PostProfilePictureErrors,
   ProfilePictureSuccess,
   PublicUser,
   Success,
@@ -102,8 +103,10 @@ export async function getUserProfilePicture(
 
     switch (response.status) {
       case 200:
-        console.info('');
         const photoBlob: Blob = await response.blob();
+        console.info(
+          `Successfully retrieved photo ${photoBlob.size} ${photoBlob.type}`,
+        );
         const urlPhoto: string = URL.createObjectURL(photoBlob);
         return ok(urlPhoto);
       case 401:
@@ -113,7 +116,7 @@ export async function getUserProfilePicture(
         console.error(`User id not found ${responseStr}`);
         return errorResp(CommonHTTPErrors.NotFound);
       case 500:
-        console.error(`Unknown server error ${responseStr}`);
+        console.error(`Error server error ${responseStr}`);
         return errorResp(CommonHTTPErrors.Server_Error);
       default:
         console.error(`Unknown response from server ${responseStr}`);
@@ -122,6 +125,43 @@ export async function getUserProfilePicture(
   });
 }
 
-export async function changeUserProfilePicture(userId: number, photo: Blob) {
+export async function changeUserProfilePicture(
+  userId: number,
+  photo: Blob,
+  photoType: 'png' | 'jpeg' = 'png',
+): Promise<Handler<PostProfilePictureErrors, Success>> {
   console.info(`Setting user profile picture for ${userId}`);
+
+  const request = await req(
+    `user/${userId}/photo`,
+    Verbs.POST,
+    photo,
+    undefined,
+    undefined,
+    `image/${photoType}`,
+  );
+
+  return fetch(request).then(response => {
+    const responseStr = JSON.stringify(response);
+    switch (response.status) {
+      case 200:
+        console.info('Successfully uploaded photo');
+        return ok(true);
+      case 400:
+        console.error(`Bad request when uploading photo ${responseStr}`);
+        return errorResp(CommonHTTPErrors.BadRequest);
+      case 401:
+        console.error(`Unauthorised request for user ${userId} ${responseStr}`);
+        return errorResp(CommonHTTPErrors.Unauthorised);
+      case 404:
+        console.error(`User id (${userId}) not found ${responseStr}`);
+        return errorResp(CommonHTTPErrors.NotFound);
+      case 500:
+        console.error(`Error server error ${responseStr}`);
+        return errorResp(CommonHTTPErrors.Server_Error);
+      default:
+        console.error(`Unknown response from server ${responseStr}`);
+        return errorResp(CommonAppErrors.UnknownHttpError);
+    }
+  });
 }

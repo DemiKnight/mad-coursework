@@ -114,9 +114,15 @@ export type UserUpdateRequest = {
 };
 
 // User profile picture
-export type ProfilePictureSuccess = SuccessT<string>;
+export type ProfilePictureSuccess = SuccessT<string>; // URL to local photo
 export type GetProfilePictureErrors =
   | CommonHTTPErrors.Server_Error
   | CommonHTTPErrors.NotFound
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Unauthorised;
+export type PostProfilePictureErrors =
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.NotFound
+  | CommonHTTPErrors.BadRequest
   | CommonAppErrors.UnknownHttpError
   | CommonHTTPErrors.Unauthorised;

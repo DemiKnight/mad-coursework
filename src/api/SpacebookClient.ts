@@ -60,12 +60,13 @@ export async function req<RequestT extends object | undefined = undefined>(
   requestBody: RequestT,
   parameterQueries?: Array<{key: string; value: string}>,
   requriesAuth: boolean = true,
+  contentType: string = 'application/json',
 ): Promise<Request> {
   const pathQueries: string = queryBuilder(parameterQueries);
 
   const fullURL: string = `${baseURL}${url}${pathQueries}`;
 
-  const headersToInclude = new Headers({'Content-Type': 'application/json'});
+  const headersToInclude = new Headers({'Content-Type': contentType});
 
   if (requriesAuth) {
     const potentialKey: string | CommonAppErrors.TokenNotFound =
@@ -86,7 +87,10 @@ export async function req<RequestT extends object | undefined = undefined>(
   const finalRequestDetails = {
     method: verb,
     headers: headersToInclude,
-    body: JSON.stringify(requestBody),
+    body:
+      contentType === 'application/json'
+        ? JSON.stringify(requestBody)
+        : requestBody,
   } as RequestInit;
 
   console.log(fullURL);
