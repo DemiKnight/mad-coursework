@@ -1,8 +1,19 @@
 import {createServer} from 'miragejs';
 import {req, Verbs} from '../../src/api/SpacebookClient';
 import {Server} from 'miragejs/server';
+import Keychain from 'react-native-keychain';
 
 let server: Server;
+
+jest.mock(
+  'Keychain' /*, () => {
+  // const Keychain = require('react-native-keychain');
+  Keychain.getGenericPassword.mockReturnValue(
+    Promise.resolve({password: 'xx'}),
+  );
+  return Keychain;
+}*/,
+);
 
 beforeEach(() => {
   server = createServer({
@@ -16,8 +27,8 @@ afterEach(() => {
 function general<T = boolean>(
   response: Request,
   bodyUsed: T,
+  method: string = 'GET',
   url: string = 'http://localhost:3333/api/1.0.0/demo',
-  method: string = 'POST',
   headers: object = {
     map: {'content-type': 'application/json'},
   },
@@ -33,8 +44,8 @@ describe('SpacebookClient: req', () => {
     // give / when
     const response: Request = await req(
       'demo',
-      Verbs.POST,
-      {},
+      Verbs.GET,
+      undefined,
       undefined,
       false,
     );
@@ -42,7 +53,37 @@ describe('SpacebookClient: req', () => {
     // then
     general(response, false);
   });
-  it('POST request', async () => {});
+  it('POST request', async () => {
+    // give / when
+    const response: Request = await req(
+      'demo',
+      Verbs.POST,
+      undefined,
+      undefined,
+      false,
+    );
+
+    // then
+    general(response, false, 'POST');
+  });
+  it('Post request full', async () => {
+    // given
+    Keychain.getGenericPassword.mockReturnValue(
+      Promise.resolve({password: 'xx'}),
+    );
+    // when
+    const response = await req(
+      'demo',
+      Verbs.POST,
+      {test: 2},
+      [{key: 'q', value: 'name'}],
+      true,
+      'application/xml',
+      'http://api.spacebook.com/api/demo',
+    );
+
+    // then
+  });
 });
 
 describe('SpacebookClient: ok', () => {});

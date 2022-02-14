@@ -56,7 +56,7 @@ function authKey(): Promise<string | CommonAppErrors.TokenNotFound> {
 
 export async function req<RequestT extends object | undefined = undefined>(
   url: string,
-  verb: keyof typeof Verbs,
+  verb: keyof typeof Verbs = Verbs.GET,
   requestBody: RequestT,
   parameterQueries?: Array<{key: string; value: string}>,
   requriesAuth: boolean = true,
