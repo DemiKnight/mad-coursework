@@ -61,10 +61,11 @@ export async function req<RequestT extends object | undefined = undefined>(
   parameterQueries?: Array<{key: string; value: string}>,
   requriesAuth: boolean = true,
   contentType: string = 'application/json',
+  hostURL: string = baseURL,
 ): Promise<Request> {
   const pathQueries: string = queryBuilder(parameterQueries);
 
-  const fullURL: string = `${baseURL}${url}${pathQueries}`;
+  const fullURL: string = `${hostURL}${url}${pathQueries}`;
 
   const headersToInclude = new Headers({'Content-Type': contentType});
 
@@ -92,7 +93,5 @@ export async function req<RequestT extends object | undefined = undefined>(
         ? JSON.stringify(requestBody)
         : requestBody,
   } as RequestInit;
-
-  console.log(fullURL);
   return new Request(fullURL, finalRequestDetails);
 }
