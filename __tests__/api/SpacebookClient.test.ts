@@ -5,15 +5,15 @@ import Keychain from 'react-native-keychain';
 
 let server: Server;
 
-jest.mock(
-  'Keychain' /*, () => {
-  // const Keychain = require('react-native-keychain');
-  Keychain.getGenericPassword.mockReturnValue(
-    Promise.resolve({password: 'xx'}),
-  );
-  return Keychain;
-}*/,
-);
+// jest.mock(
+//   'Keychain' /*, () => {
+//   // const Keychain = require('react-native-keychain');
+//   Keychain.getGenericPassword.mockReturnValue(
+//     Promise.resolve({password: 'xx'}),
+//   );
+//   return Keychain;
+// }*/,
+// );
 
 beforeEach(() => {
   server = createServer({
@@ -66,24 +66,25 @@ describe('SpacebookClient: req', () => {
     // then
     general(response, false, 'POST');
   });
-  it('Post request full', async () => {
+  it.todo(
+    'Post request full' /*, async () => {
     // given
-    Keychain.getGenericPassword.mockReturnValue(
-      Promise.resolve({password: 'xx'}),
-    );
+    // Keychain.getGenericPassword.mockReturnValue(
+    //   Promise.resolve({password: 'xx'}),
+    // );
     // when
-    const response = await req(
-      'demo',
-      Verbs.POST,
-      {test: 2},
-      [{key: 'q', value: 'name'}],
-      true,
-      'application/xml',
-      'http://api.spacebook.com/api/demo',
-    );
-
+    // const response = await req(
+    //   'demo',
+    //   Verbs.POST,
+    //   {test: 2},
+    //   [{key: 'q', value: 'name'}],
+    //   true,
+    //   'application/xml',
+    //   'http://api.spacebook.com/api/demo',
+    // );
     // then
-  });
+  }*/,
+  );
 });
 
 describe('SpacebookClient: ok', () => {});
