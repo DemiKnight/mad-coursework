@@ -14,6 +14,11 @@ export enum CommonAppErrors {
   UnknownHttpError,
   FriendListVisibility,
   FriendAlreadyAdded,
+  PostVisibility,
+  PostDeleteAccess,
+  PostModifyAccess,
+  PostAlreadyLiked,
+  PostAlreadyUnliked,
 }
 
 export type SuccessT<T> = T;
@@ -128,8 +133,14 @@ export type PostProfilePictureErrors =
   | CommonHTTPErrors.Unauthorised;
 
 // Post management
+
+export type PaginationOption = {
+  limit: number;
+  offset: number;
+};
+
 export type NewPost = {
-  test: string;
+  text: string;
 };
 
 export type Post = {
@@ -138,5 +149,45 @@ export type Post = {
   author: PublicUser;
   numLikes: number;
 } & NewPost;
+
+export type NewPostErrors =
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
+
+export type GetPostErrors =
+  | CommonAppErrors.UnknownHttpError
+  | CommonAppErrors.PostVisibility
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
+
+export type RemovePostErrors =
+  | CommonAppErrors.PostDeleteAccess
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
+
+export type UpdatePostErrors =
+  | CommonAppErrors.PostModifyAccess
+  | CommonHTTPErrors.BadRequest
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
+export type LikePostErrors =
+  | CommonAppErrors.PostAlreadyLiked
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
+export type UnlikePostErrors =
+  | CommonAppErrors.PostAlreadyUnliked
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
 
 // Search
