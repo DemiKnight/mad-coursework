@@ -126,3 +126,17 @@ export type PostProfilePictureErrors =
   | CommonHTTPErrors.BadRequest
   | CommonAppErrors.UnknownHttpError
   | CommonHTTPErrors.Unauthorised;
+
+// Post management
+export type NewPost = {
+  test: string;
+};
+
+export type Post = {
+  post_id: number;
+  timestamp: number;
+  author: PublicUser;
+  numLikes: number;
+} & NewPost;
+
+// Search
