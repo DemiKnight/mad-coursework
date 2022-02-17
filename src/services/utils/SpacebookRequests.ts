@@ -10,7 +10,6 @@ export enum CommonHTTPErrors {
 
 export enum CommonAppErrors {
   TokenNotFound,
-
   UnknownHttpError,
   FriendListVisibility,
   FriendAlreadyAdded,
@@ -23,8 +22,6 @@ export enum CommonAppErrors {
 
 export type SuccessT<T> = T;
 export type Success = SuccessT<boolean>;
-
-// export type Success = typeof _Success;
 
 // Login
 export type LoginRequest = {
@@ -135,7 +132,7 @@ export type PostProfilePictureErrors =
 // Post management
 
 export type PaginationOption = {
-  limit: number;
+  pageSize: number;
   offset: number;
 };
 
@@ -149,6 +146,13 @@ export type Post = {
   author: PublicUser;
   numLikes: number;
 } & NewPost;
+
+export type GetPostListErrors =
+  | CommonAppErrors.UnknownHttpError
+  | CommonAppErrors.PostVisibility
+  | CommonHTTPErrors.Server_Error
+  | CommonHTTPErrors.Unauthorised
+  | CommonHTTPErrors.NotFound;
 
 export type NewPostErrors =
   | CommonAppErrors.UnknownHttpError

@@ -2,6 +2,7 @@ import {
   CommonAppErrors,
   CommonHTTPErrors,
   GetPostErrors,
+  GetPostListErrors,
   LikePostErrors,
   NewPost,
   NewPostErrors,
@@ -14,9 +15,64 @@ import {
 } from '../services/utils/SpacebookRequests';
 import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 
-export async function getListOfPosts(userId: number) {
-  console.info(`Getting listOfPosts for ${userId}`);
+const initalListPostsPagination: PaginationOption = {
+  pageSize: 50,
+  offset: 0,
+};
+
+export async function getAllPosts(userId: number) {}
+
+export async function getListOfPosts(
+  userId: number,
+  paginationOptions: PaginationOption = initalListPostsPagination,
+): Promise<Handler<GetPostListErrors, Array<Post>>> {
+  console.info(
+    `Getting listOfPosts for ${userId}. Pagination ${paginationOptions.pageSize} & ${paginationOptions.offset}`,
+  );
+  const request = await req<undefined>(
+    `user/${userId}/post`,
+    Verbs.GET,
+    undefined,
+    [
+      {key: 'limit', value: String(paginationOptions.pageSize)},
+      {key: 'offset', value: String(paginationOptions.offset)},
+    ],
+  );
+
+  return fetch(request).then(async response => {
+    const responseStr = JSON.stringify(response);
+    switch (response.status) {
+      case 200:
+        const body: Array<Post> = await response.json();
+        console.debug(`Success ${body}`);
+        return ok(body);
+      case 401:
+        console.error(
+          `Unauthorised whilst getting list of post: ${responseStr}`,
+        );
+        return errorResp(CommonHTTPErrors.Unauthorised);
+      case 403:
+        console.error(`Post visibility issue ${responseStr}`);
+        return errorResp(CommonAppErrors.PostVisibility);
+      case 404:
+        console.error(
+          `User not found whilst getting list of posts: ${responseStr}`,
+        );
+        return errorResp(CommonHTTPErrors.NotFound);
+      case 500:
+        console.error(
+          `Server error whilst getting list of posts: ${responseStr}`,
+        );
+        return errorResp(CommonHTTPErrors.Server_Error);
+      default:
+        console.error(
+          `Unknown HTTP response whilst getting list of posts: ${responseStr}`,
+        );
+        return errorResp(CommonAppErrors.UnknownHttpError);
+    }
+  });
 }
+
 export async function addNewPost(
   userId: number,
   newPostText: string,
@@ -66,12 +122,13 @@ export async function getPost(
     switch (response.status) {
       case 200:
         const body: Post = await response.json();
+        console.debug(`Success ${body}`);
         return ok(body);
       case 401:
         console.error(`Unauthorised whilst getting post: ${responseStr}`);
         return errorResp(CommonHTTPErrors.Unauthorised);
       case 403:
-        console.error(`Post visability issue ${responseStr}`);
+        console.error(`Post visibility issue ${responseStr}`);
         return errorResp(CommonAppErrors.PostVisibility);
       case 404:
         console.error(`Post or user not found ${responseStr}`);
