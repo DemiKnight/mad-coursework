@@ -195,3 +195,8 @@ export type UnlikePostErrors =
   | CommonHTTPErrors.NotFound;
 
 // Search
+export type SearchErrors =
+  | CommonHTTPErrors.BadRequest
+  | CommonHTTPErrors.Server_Error
+  | CommonAppErrors.UnknownHttpError
+  | CommonHTTPErrors.Unauthorised;
