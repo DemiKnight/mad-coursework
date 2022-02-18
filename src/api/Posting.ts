@@ -20,7 +20,33 @@ const initalListPostsPagination: PaginationOption = {
   offset: 0,
 };
 
-export async function getAllPosts(userId: number) {}
+export async function getAllPosts(
+  userId: number,
+): Promise<Handler<GetPostListErrors, Array<Post>>> {
+  let postStore: Array<Post> = [];
+  let lastReturnSize: number = 0;
+  let error: GetPostListErrors | undefined;
+
+  do {
+    lastReturnSize = 0;
+    const response = await getListOfPosts(userId, {
+      ...initalListPostsPagination,
+      offset: postStore.length,
+    });
+    if (response.intendedResult !== undefined) {
+      // TODO improve
+      lastReturnSize = response.intendedResult.length;
+      response.intendedResult.forEach(x => postStore.push(x));
+    } else {
+      error = response.errors;
+    }
+  } while (lastReturnSize >= 50 && error === undefined);
+  if (error === undefined) {
+    return ok(postStore);
+  } else {
+    return errorResp(error);
+  }
+}
 
 export async function getListOfPosts(
   userId: number,
