@@ -15,7 +15,7 @@ export async function getFriendRequests(): Promise<
   Handler<GetFriendRequestsError, Array<RegisterRequest>>
 > {
   console.info('Getting friend requests...');
-  const result = await req('friendrequests', Verbs.GET, {});
+  const result = await req('friendrequests', Verbs.GET);
 
   return fetch(result).then(async response => {
     const responseString = JSON.stringify(response);
@@ -40,7 +40,7 @@ export async function acceptFriendRequest(
   userId: number,
 ): Promise<Handler<AcceptFriendRequestError, Success>> {
   console.info(`accept friend request for ${userId}`);
-  const result = await req(`friendrequests/${userId}`, Verbs.POST, {});
+  const result = await req(`friendrequests/${userId}`, Verbs.POST);
 
   return fetch(result).then(response => {
     const responseStr = JSON.stringify(response);
@@ -65,7 +65,7 @@ export async function acceptFriendRequest(
 
 export async function declineFriendRequest(userId: number) {
   console.info(`Decline Friend Request for ${userId}`);
-  const result = await req(`friendrequests/${userId}`, Verbs.DELETE, {});
+  const result = await req(`friendrequests/${userId}`, Verbs.DELETE);
 
   return fetch(result).then(response => {
     const responseStr = JSON.stringify(response);
@@ -92,7 +92,7 @@ export async function getFriendList(
   userId: number,
 ): Promise<Handler<FriendsListErrors, Array<PublicUser>>> {
   console.info(`Get Friend list ${userId}`);
-  const result = await req(`user/${userId}/friends`, Verbs.GET, {});
+  const result = await req(`user/${userId}/friends`, Verbs.GET);
 
   return fetch(result).then(async response => {
     const responseStr = JSON.stringify(response);
@@ -124,7 +124,7 @@ export async function addFriend(
   userId: number,
 ): Promise<Handler<AddFriendErrors, Success>> {
   console.info(`Add user as friend ${userId}`);
-  const result = await req(`user/${userId}/friends`, Verbs.POST, {});
+  const result = await req(`user/${userId}/friends`, Verbs.POST);
 
   return fetch(result).then(response => {
     const responseStr = JSON.stringify(response);

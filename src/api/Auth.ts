@@ -13,7 +13,7 @@ import {
 import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 
 export async function logout(): Promise<Handler<LogoutError, Success>> {
-  const request = await req('logout', Verbs.POST, {});
+  const request = await req('logout', Verbs.POST);
 
   return fetch(request)
     .then(async (response: Response) => {

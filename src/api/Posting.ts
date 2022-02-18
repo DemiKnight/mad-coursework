@@ -104,7 +104,7 @@ export async function addNewPost(
   newPostText: string,
 ): Promise<Handler<NewPostErrors, Success>> {
   console.info(`Posting new post for user ${userId}, with text ${newPostText}`);
-  const request = await req<NewPost>(`/user/${userId}/post`, Verbs.POST, {
+  const request = await req<NewPost>(`user/${userId}/post`, Verbs.POST, {
     text: newPostText,
   });
 
@@ -138,11 +138,7 @@ export async function getPost(
   postId: number,
 ): Promise<Handler<GetPostErrors, Post>> {
   console.info(`Getting post ${postId} for user ${userId}`);
-  const request = await req<undefined>(
-    `user/${userId}/post/${postId}`,
-    Verbs.GET,
-    undefined,
-  );
+  const request = await req(`user/${userId}/post/${postId}`, Verbs.GET);
   return fetch(request).then(async response => {
     const responseStr = JSON.stringify(response);
     switch (response.status) {
@@ -176,11 +172,7 @@ export async function removePost(
   postId: number,
 ): Promise<Handler<RemovePostErrors, Success>> {
   console.info(`Removing post ${postId} for user ${userId}`);
-  const request = await req<undefined>(
-    `user/${userId}/post/${postId}`,
-    Verbs.DELETE,
-    undefined,
-  );
+  const request = await req(`user/${userId}/post/${postId}`, Verbs.DELETE);
 
   return fetch(request).then(response => {
     const responseStr = JSON.stringify(response);
@@ -262,11 +254,7 @@ export async function likePost(
   postId: number,
 ): Promise<Handler<LikePostErrors, Success>> {
   console.info(`Liking post ${postId}, for use ${userId}`);
-  const request = await req<undefined>(
-    `user/${userId}/post/${postId}/like`,
-    Verbs.POST,
-    undefined,
-  );
+  const request = await req(`user/${userId}/post/${postId}/like`, Verbs.POST);
   return fetch(request).then(response => {
     const responseStr = JSON.stringify(response);
     switch (response.status) {
@@ -298,11 +286,7 @@ export async function unlikePost(
   postId: number,
 ): Promise<Handler<UnlikePostErrors, Success>> {
   console.info(`Unliking post ${postId} for user ${userId}`);
-  const request = await req<undefined>(
-    `user/${userId}/post/${postId}/like`,
-    Verbs.DELETE,
-    undefined,
-  );
+  const request = await req(`user/${userId}/post/${postId}/like`, Verbs.DELETE);
   return fetch(request).then(response => {
     const responseStr = JSON.stringify(response);
     switch (response.status) {
