@@ -13,12 +13,14 @@ import {
   UnlikePostErrors,
   UpdatePostErrors,
 } from '../services/utils/SpacebookRequests';
-import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
-
-const initalListPostsPagination: PaginationOption = {
-  pageSize: 50,
-  offset: 0,
-};
+import {
+  errorResp,
+  Handler,
+  initalListPostsPagination,
+  ok,
+  req,
+  Verbs,
+} from './SpacebookClient';
 
 export async function getAllPosts(
   userId: number,

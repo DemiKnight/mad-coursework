@@ -1,4 +1,7 @@
-import {CommonAppErrors} from '../services/utils/SpacebookRequests';
+import {
+  CommonAppErrors,
+  PaginationOption,
+} from '../services/utils/SpacebookRequests';
 import Keychain from 'react-native-keychain';
 
 export enum Verbs {
@@ -19,6 +22,11 @@ export function errorResp<Err, T>(error: Err): Handler<Err, T> {
 export function ok<Err, T>(result: T): Handler<Err, T> {
   return {intendedResult: result};
 }
+
+export const initalListPostsPagination: PaginationOption = {
+  pageSize: 50,
+  offset: 0,
+};
 
 const baseURL: string = 'http://localhost:3333/api/1.0.0/';
 
