@@ -16,7 +16,7 @@ export async function getUserInfo(
   userId: number,
 ): Promise<Handler<GetUserInfoErrors, PublicUser>> {
   console.info(`Get user info for ${userId}`);
-  const request = await req('user/${userId}', Verbs.GET);
+  const request = await req(`user/${userId}`, Verbs.GET);
 
   return fetch(request).then(async response => {
     const responseStr = JSON.stringify(response);
