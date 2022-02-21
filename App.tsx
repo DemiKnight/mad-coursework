@@ -52,6 +52,11 @@ const App = () => {
   });
 
   React.useEffect(() => {
+    // We use Hermes, log whether it's enabled (it should always be)
+    // @ts-ignore
+    console.debug(`Is Hermes enabled? ${!!global.HermesInternal}`);
+
+    // When app loads, obtain token.
     const obtainAuthToken = async () => {
       const store: false | UserCredentials =
         await Keychain.getGenericPassword();
@@ -132,9 +137,6 @@ const App = () => {
     }),
     [],
   );
-
-  // @ts-ignore
-  console.info(`Is Hermes enabled? ${!!global.HermesInternal}`);
 
   return (
     <SafeAreaProvider>
