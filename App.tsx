@@ -18,12 +18,15 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {FriendsNav} from './src/components/Friends/FriendsNav';
 export type RootStackParams = {
   Home: undefined;
   Timeline: undefined;
   Settings: undefined;
   Friends: undefined;
 };
+
 const TabNav = createBottomTabNavigator<RootStackParams>();
 
 export type AuthContextT = {
@@ -150,27 +153,8 @@ const App = () => {
               <TabNav.Screen name="Timeline" component={TimelineScreen} />
               <TabNav.Screen
                 name="Friends"
-                component={FriendsListScreen}
-                options={{
-                  headerLeft: () => (
-                    <Button
-                      title="Requests"
-                      type="outline"
-                      iconRight
-                      icon={<Icon name="user" size={20} color="#808080" />}
-                    />
-                  ),
-                  headerRight: () => (
-                    <Button
-                      icon={<Icon name="search1" size={20} color="#808080" />}
-                      title="Search"
-                      type="outline"
-                      onPress={() => {
-                        console.info('xx');
-                      }}
-                    />
-                  ),
-                }}
+                component={FriendsNav}
+                options={{headerShown: false}}
               />
               <TabNav.Screen name="Settings" component={SettingsScreen} />
             </TabNav.Navigator>
