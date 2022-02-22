@@ -16,8 +16,6 @@ export const RowProfile = (target: PublicUser) => {
     setOptionsVisable(!optionsVisable);
   }, [setOptionsVisable, optionsVisable]);
 
-  console.log(target);
-
   return (
     <SafeAreaView style={styles.wrapper}>
       {profilePic === undefined ? (
@@ -38,9 +36,9 @@ export const RowProfile = (target: PublicUser) => {
       )}
       <View style={styles.middleColumn}>
         <Text>
-          {target.first_name} {target.last_name}
+          {target.user_givenname} {target.user_familyname}
         </Text>
-        <Text style={styles.emailText}>{target.email}</Text>
+        <Text style={styles.emailText}>{target.user_email}</Text>
       </View>
       <View style={styles.middleColumn}>
         <Text>

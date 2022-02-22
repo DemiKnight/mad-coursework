@@ -1,28 +1,45 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, VirtualizedList} from 'react-native';
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
+import {getFriendList} from '../api/Friends';
 
 export const FriendsListScreen = () => {
-  const dummyUser: PublicUser = {
-    user_id: 1,
-    last_name: 'Knight',
-    first_name: 'Alex',
-    email: 'alex@alexknight.co.uk',
-  };
+  const [friendListData, setFriendListData] = React.useState<Array<PublicUser>>(
+    [],
+  );
+  const [errors, setErrors] = React.useState([]);
+
+  React.useEffect(() => {
+    async function dataFn() {
+      getFriendList(1).then(response => {
+        if (response.intendedResult !== undefined) {
+          console.log(response.intendedResult);
+          setFriendListData(response.intendedResult);
+        } else {
+        }
+      });
+    }
+
+    dataFn();
+  }, [setFriendListData]);
+
   return (
     <SafeAreaView style={styles.wrapper}>
-      <RowProfile
-        user_id={dummyUser.user_id}
-        email={dummyUser.email}
-        first_name={dummyUser.first_name}
-        last_name={dummyUser.last_name}
-      />
-      <RowProfile
-        user_id={dummyUser.user_id}
-        email={dummyUser.email}
-        first_name={dummyUser.first_name}
-        last_name={dummyUser.last_name}
+      <VirtualizedList<PublicUser>
+        data={friendListData}
+        initialNumToRender={20}
+        getItem={(data: Array<PublicUser>, index) => data[index]}
+        keyExtractor={(item, _) => String(item.user_id)}
+        getItemCount={x => x.length}
+        renderItem={item => (
+          <RowProfile
+            user_id={item.item.user_id}
+            user_email={item.item.user_email}
+            user_givenname={item.item.user_givenname}
+            user_familyname={item.item.user_familyname}
+          />
+        )}
       />
     </SafeAreaView>
   );

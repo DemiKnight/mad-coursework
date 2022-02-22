@@ -76,9 +76,9 @@ export type AcceptFriendRequestError =
 // Friends list
 export type PublicUser = {
   user_id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
+  user_givenname: string;
+  user_familyname: string;
+  user_email: string;
 };
 
 export type FriendsListErrors =
