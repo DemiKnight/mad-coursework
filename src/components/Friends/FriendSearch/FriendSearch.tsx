@@ -1,19 +1,21 @@
 import React from 'react';
-import {SafeAreaView, VirtualizedList} from 'react-native';
-import {Button, Input, Text} from 'react-native-elements';
+import {SafeAreaView, View, VirtualizedList} from 'react-native';
+import {Button, Chip, Input, Switch, Text} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {search} from '../../../api/Search';
 import {RowProfile} from '../RowProfile/RowProfile';
 
 export const FriendSearch = () => {
   const [query, setQuery] = React.useState<string>('');
+  const [isPublicSearch, setIsPublicSearch] = React.useState<boolean>(true);
   const [searchResults, setSearchResults] = React.useState<Array<PublicUser>>(
     [],
   );
 
   React.useEffect(() => {
     async function getSearchResults() {
-      const request = await search(query, 'all');
+      const scope = isPublicSearch ? 'all' : 'friends';
+      const request = await search(query, scope);
       if (request.intendedResult !== undefined) {
         setSearchResults(request.intendedResult);
       } else {
@@ -23,8 +25,10 @@ export const FriendSearch = () => {
 
     if (query?.trim() !== '') {
       getSearchResults();
+    } else {
+      setSearchResults([]);
     }
-  }, [query]);
+  }, [query, isPublicSearch]);
 
   return (
     <SafeAreaView>
@@ -33,6 +37,14 @@ export const FriendSearch = () => {
         autoCompleteType="off"
         onChangeText={setQuery}
       />
+      <View>
+        <Text>Public Search</Text>
+        <Switch
+          value={isPublicSearch}
+          onChange={() => setIsPublicSearch(!isPublicSearch)}
+        />
+      </View>
+
       <VirtualizedList<PublicUser>
         data={searchResults}
         initialNumToRender={20}
