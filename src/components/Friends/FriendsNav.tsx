@@ -1,9 +1,13 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {FriendsListScreen} from '../FriendsListScreen';
 import {FriendSearch} from './FriendSearch/FriendSearch';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {FriendRequests} from './FriendRequests/FriendRequests';
 export type FriendStackParams = {
   List: undefined;
   Search: undefined;
@@ -12,7 +16,8 @@ export type FriendStackParams = {
 
 const FriendsStack = createNativeStackNavigator<FriendStackParams>();
 
-export const FriendsNav = () => {
+type FriendsNavProps = NativeStackScreenProps<FriendStackParams, 'List'>;
+export const FriendsNav = ({navigation}: FriendsNavProps) => {
   return (
     <FriendsStack.Navigator initialRouteName="List">
       <FriendsStack.Screen
@@ -26,6 +31,7 @@ export const FriendsNav = () => {
               type="outline"
               iconRight
               icon={<Icon name="user" size={20} color="#808080" />}
+              onPress={() => navigation.navigate('FriendRequests')}
             />
           ),
           headerRight: () => (
@@ -33,15 +39,13 @@ export const FriendsNav = () => {
               icon={<Icon name="search1" size={20} color="#808080" />}
               title="Search"
               type="outline"
-              onPress={() => {
-                console.info('xx');
-              }}
+              onPress={() => navigation.navigate('Search')}
             />
           ),
         }}
       />
       <FriendsStack.Screen name="Search" component={FriendSearch} />
-      <FriendsStack.Screen name="FriendRequests" component={FriendSearch} />
+      <FriendsStack.Screen name="FriendRequests" component={FriendRequests} />
     </FriendsStack.Navigator>
   );
 };
