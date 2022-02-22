@@ -16,6 +16,8 @@ import {SettingsScreen} from './src/components/SettingsScreen';
 import {FriendsListScreen} from './src/components/FriendsListScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/AntDesign';
 export type RootStackParams = {
   Home: undefined;
   Timeline: undefined;
@@ -146,7 +148,30 @@ const App = () => {
             <TabNav.Navigator initialRouteName="Home">
               <TabNav.Screen name="Home" component={Home} />
               <TabNav.Screen name="Timeline" component={TimelineScreen} />
-              <TabNav.Screen name="Friends" component={FriendsListScreen} />
+              <TabNav.Screen
+                name="Friends"
+                component={FriendsListScreen}
+                options={{
+                  headerLeft: () => (
+                    <Button
+                      title="Requests"
+                      type="outline"
+                      iconRight
+                      icon={<Icon name="user" size={20} color="#808080" />}
+                    />
+                  ),
+                  headerRight: () => (
+                    <Button
+                      icon={<Icon name="search1" size={20} color="#808080" />}
+                      title="Search"
+                      type="outline"
+                      onPress={() => {
+                        console.info('xx');
+                      }}
+                    />
+                  ),
+                }}
+              />
               <TabNav.Screen name="Settings" component={SettingsScreen} />
             </TabNav.Navigator>
           ) : (
