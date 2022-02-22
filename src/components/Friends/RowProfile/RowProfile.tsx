@@ -4,17 +4,22 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
 
-export const RowProfile = (target: PublicUser) => {
+export type RowProfileProps = {
+  target: PublicUser;
+  optionsComponent?: React.ReactNode;
+};
+
+export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
   const [profilePic, setProfilePic] = React.useState(undefined);
   const [postNumber, setPostNumber] = React.useState(2);
   const [likesNumber, setlikesNumber] = React.useState(33);
-  const [optionsVisable, setOptionsVisable] = React.useState(false);
+  const [optionsVisable, setOptionsVisible] = React.useState(false);
 
   React.useEffect(() => {}, [profilePic]);
 
   const toggleOptions = React.useCallback(() => {
-    setOptionsVisable(!optionsVisable);
-  }, [setOptionsVisable, optionsVisable]);
+    setOptionsVisible(!optionsVisable);
+  }, [setOptionsVisible, optionsVisable]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -49,6 +54,7 @@ export const RowProfile = (target: PublicUser) => {
         </Text>
       </View>
       <View style={styles.optionButtonWrapper}>
+        {optionsComponent}
         <Button
           title={'...'}
           buttonStyle={styles.optionsButton}
