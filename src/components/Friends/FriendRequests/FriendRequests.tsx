@@ -3,6 +3,7 @@ import {SafeAreaView, VirtualizedList} from 'react-native';
 import {Button} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
+import {getFriendRequests} from '../../../api/Friends';
 
 export const FriendRequests = () => {
   const [friendRequestList, setFriendRequestList] = useState<Array<PublicUser>>(
@@ -10,18 +11,15 @@ export const FriendRequests = () => {
   );
 
   React.useEffect(() => {
-    const test: PublicUser[] = [...Array(19).keys()].map(
-      index =>
-        ({
-          user_id: index,
-          user_givenname: `JOhn ${index}`,
-          user_familyname: `Smith ${index}`,
-          user_email: `test${index}@example.com`,
-        } as PublicUser),
-    );
-
-    console.log(`${test}`);
-    setFriendRequestList(test);
+    async function obtainFriendRequestData() {
+      const friendRequestData = await getFriendRequests();
+      if (friendRequestData.intendedResult !== undefined) {
+        setFriendRequestList(friendRequestData.intendedResult);
+      } else {
+        // TODO
+      }
+    }
+    obtainFriendRequestData();
   }, [setFriendRequestList]);
 
   return (

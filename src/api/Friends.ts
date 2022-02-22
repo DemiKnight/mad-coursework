@@ -7,12 +7,11 @@ import {
   FriendsListErrors,
   GetFriendRequestsError,
   PublicUser,
-  RegisterRequest,
   Success,
 } from '../services/utils/SpacebookRequests';
 
 export async function getFriendRequests(): Promise<
-  Handler<GetFriendRequestsError, Array<RegisterRequest>>
+  Handler<GetFriendRequestsError, Array<PublicUser>>
 > {
   console.info('Getting friend requests...');
   const result = await req('friendrequests', Verbs.GET);
@@ -21,8 +20,8 @@ export async function getFriendRequests(): Promise<
     const responseString = JSON.stringify(response);
     switch (response.status) {
       case 200:
-        const body: Array<RegisterRequest> = await response.json();
-        console.log(body);
+        const body: Array<PublicUser> = await response.json();
+        console.log(`Successful response ${JSON.stringify(body)}`);
         return ok(body);
       case 401:
         console.error(
