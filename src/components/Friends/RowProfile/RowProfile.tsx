@@ -13,13 +13,8 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
   const [profilePic, setProfilePic] = React.useState(undefined);
   const [postNumber, setPostNumber] = React.useState(2);
   const [likesNumber, setlikesNumber] = React.useState(33);
-  const [optionsVisable, setOptionsVisible] = React.useState(false);
 
   React.useEffect(() => {}, [profilePic]);
-
-  const toggleOptions = React.useCallback(() => {
-    setOptionsVisible(!optionsVisable);
-  }, [setOptionsVisible, optionsVisable]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -53,25 +48,7 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
           Likes: <Text style={styles.stat}>{likesNumber}</Text>
         </Text>
       </View>
-      <View style={styles.optionButtonWrapper}>
-        {optionsComponent}
-        <Button
-          title={'...'}
-          buttonStyle={styles.optionsButton}
-          onPress={toggleOptions}
-        />
-        <Overlay
-          style={styles.overlayTest}
-          isVisible={optionsVisable}
-          onBackdropPress={toggleOptions}>
-          <Button
-            title={'View'}
-            onPress={() => {
-              console.log('View');
-            }}
-          />
-        </Overlay>
-      </View>
+      <View style={styles.optionButtonWrapper}>{optionsComponent}</View>
     </SafeAreaView>
   );
 };
@@ -90,12 +67,6 @@ const styles = StyleSheet.create({
   },
   stat: {
     fontWeight: 'bold',
-  },
-  optionsButton: {
-    padding: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignSelf: 'center',
   },
   optionButtonWrapper: {
     alignItems: 'center',

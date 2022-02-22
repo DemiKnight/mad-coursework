@@ -45,7 +45,11 @@ export const FriendsNav = ({navigation}: FriendsNavProps) => {
         }}
       />
       <FriendsStack.Screen name="Search" component={FriendSearch} />
-      <FriendsStack.Screen name="FriendRequests" component={FriendRequests} />
+      <FriendsStack.Screen
+        options={{headerTitle: 'Friend Requests'}}
+        name="FriendRequests"
+        component={FriendRequests}
+      />
     </FriendsStack.Navigator>
   );
 };

@@ -13,13 +13,10 @@ import {
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {TimelineScreen} from './src/components/TimelineScreen';
 import {SettingsScreen} from './src/components/SettingsScreen';
-import {FriendsListScreen} from './src/components/FriendsListScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
-import {Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
+
 export type RootStackParams = {
   Home: undefined;
   Timeline: undefined;
