@@ -4,8 +4,11 @@ import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
 import {Button, Overlay} from 'react-native-elements';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {FriendStackParams} from './Friends/FriendsNav';
 
-export const FriendsListScreen = () => {
+type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
+export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   const [friendListData, setFriendListData] = React.useState<Array<PublicUser>>(
     [],
   );
@@ -56,7 +59,10 @@ export const FriendsListScreen = () => {
                   <Button
                     title={'View'}
                     onPress={() => {
-                      console.log('View');
+                      setOptionsVisible(false);
+                      navigation.navigate('Profile', {
+                        user: item.item,
+                      });
                     }}
                   />
                 </Overlay>

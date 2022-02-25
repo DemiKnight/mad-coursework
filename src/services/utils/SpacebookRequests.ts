@@ -62,6 +62,12 @@ export type RegisterErrors =
   | CommonAppErrors.UnknownHttpError;
 
 // Get friend requests
+export type FriendRequestUser = {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+};
 
 export type GetFriendRequestsError =
   | CommonHTTPErrors.Server_Error

@@ -4,11 +4,13 @@ import {
   AddFriendErrors,
   CommonAppErrors,
   CommonHTTPErrors,
+  FriendRequestUser,
   FriendsListErrors,
   GetFriendRequestsError,
   PublicUser,
   Success,
 } from '../services/utils/SpacebookRequests';
+import {UserToPubUser} from '../services/utils/UserUtils';
 
 export async function getFriendRequests(): Promise<
   Handler<GetFriendRequestsError, Array<PublicUser>>
@@ -20,9 +22,9 @@ export async function getFriendRequests(): Promise<
     const responseString = JSON.stringify(response);
     switch (response.status) {
       case 200:
-        const body: Array<PublicUser> = await response.json();
+        const body: Array<FriendRequestUser> = await response.json();
         console.log(`Successful response ${JSON.stringify(body)}`);
-        return ok(body);
+        return ok(body.map(UserToPubUser));
       case 401:
         console.error(
           `Unauthorised whilst getting friend requests: ${responseString}`,
