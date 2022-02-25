@@ -8,10 +8,15 @@ import {FriendSearch} from './FriendSearch/FriendSearch';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {FriendRequests} from './FriendRequests/FriendRequests';
+import {PublicUser} from '../../services/utils/SpacebookRequests';
+import {FullProfile} from './FullProfile/FullProfile';
 export type FriendStackParams = {
   List: undefined;
   Search: undefined;
   FriendRequests: undefined;
+  Profile: {
+    user: PublicUser;
+  };
 };
 
 const FriendsStack = createNativeStackNavigator<FriendStackParams>();
@@ -45,6 +50,7 @@ export const FriendsNav = ({navigation}: FriendsNavProps) => {
         }}
       />
       <FriendsStack.Screen name="Search" component={FriendSearch} />
+      <FriendsStack.Screen name="Profile" component={FullProfile} />
       <FriendsStack.Screen
         options={{headerTitle: 'Friend Requests'}}
         name="FriendRequests"
