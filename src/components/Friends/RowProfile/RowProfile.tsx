@@ -40,7 +40,7 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
         </Text>
         <Text style={styles.emailText}>{target.user_email}</Text>
       </View>
-      <View style={styles.middleColumn}>
+      <View style={[styles.middleColumn, styles.statsColumn]}>
         <Text>
           Posts: <Text style={styles.stat}>{postNumber}</Text>
         </Text>
@@ -61,6 +61,11 @@ const styles = StyleSheet.create({
   },
   middleColumn: {
     marginLeft: 4,
+    flexGrow: 1,
+    flex: 2,
+  },
+  statsColumn: {
+    flex: 1,
   },
   emailText: {
     color: '#808080',
@@ -71,6 +76,7 @@ const styles = StyleSheet.create({
   optionButtonWrapper: {
     alignItems: 'center',
     flexGrow: 1,
+    flex: 1,
   },
   overlayTest: {
     flex: 20,
