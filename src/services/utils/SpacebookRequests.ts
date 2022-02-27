@@ -21,7 +21,7 @@ export enum CommonAppErrors {
 }
 
 export type SuccessT<T> = T;
-export type Success = SuccessT<boolean>;
+export type Success = SuccessT<true>;
 
 // Login
 export type LoginRequest = {

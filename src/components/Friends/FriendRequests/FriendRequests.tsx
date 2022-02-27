@@ -1,11 +1,19 @@
 import React, {useState} from 'react';
-import {SafeAreaView, VirtualizedList} from 'react-native';
+import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
 import {Button} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
 import {getFriendRequests} from '../../../api/Friends';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {FriendStackParams} from '../FriendsNav';
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export const FriendRequests = () => {
+export type FriendRequestsProps = NativeStackScreenProps<
+  FriendStackParams,
+  'FriendRequests'
+>;
+
+export const FriendRequests = ({navigation}: FriendRequestsProps) => {
   const [friendRequestList, setFriendRequestList] = useState<Array<PublicUser>>(
     [],
   );
@@ -34,16 +42,25 @@ export const FriendRequests = () => {
           <RowProfile
             target={item.item}
             optionsComponent={
-              <>
+              <View style={styles.profileControls}>
                 <Button
-                  title={'y'}
-                  onPress={() => console.log(`Acceipt ${item.item.user_id}`)}
+                  icon={<Icon name="adduser" size={25} />}
+                  type="outline"
+                  onPress={() => console.log(`Accept ${item.item.user_id}`)}
                 />
                 <Button
-                  title={'n'}
+                  icon={<Icon name="eyeo" size={25} />}
+                  type="outline"
+                  onPress={() =>
+                    navigation.navigate('Profile', {user: item.item})
+                  }
+                />
+                <Button
+                  icon={<Icon name="delete" size={25} />}
+                  type="outline"
                   onPress={() => console.log(`Reject ${item.item.user_id}`)}
                 />
-              </>
+              </View>
             }
           />
         )}
@@ -51,3 +68,10 @@ export const FriendRequests = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  profileControls: {
+    flexDirection: 'row',
+    // justifyContent: 'center',
+  },
+});

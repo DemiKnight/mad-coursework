@@ -17,7 +17,6 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   const toggleOptions = React.useCallback(() => {
     setOptionsVisible(!optionsVisible);
   }, [setOptionsVisible, optionsVisible]);
-  // const [errors, setErrors] = React.useState([]);
 
   React.useEffect(() => {
     async function dataFn() {
