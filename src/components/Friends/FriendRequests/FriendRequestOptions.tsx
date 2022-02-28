@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/src/types';
 import {FriendStackParams} from '../FriendsNav';
-import {acceptFriendRequest} from '../../../api/Friends';
+import {acceptFriendRequest, declineFriendRequest} from '../../../api/Friends';
+import {mapErrors} from '../../../api/RequestUtils';
 
 enum OutcomeType {
   Accepted,
@@ -29,26 +30,40 @@ export const FriendRequestOptions = (props: {
     async function sendAcceptRequest() {
       const resultRequest = await acceptFriendRequest(props.user.user_id);
 
+      setIsLoading(false);
       if (resultRequest.intendedResult !== undefined) {
+        setOutcomeType(OutcomeType.Accepted);
       } else {
+        setErrors(
+          mapErrors(resultRequest.errors, 'Accepting', 'Friend Requests'),
+        );
       }
-
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
     }
 
     setIsLoading(true);
     await sendAcceptRequest();
+    setIsLoading(false); // Just in case something blows up
   }, [props.user, setIsLoading]);
 
   const handleReject = React.useCallback(async () => {
     console.info(`Reject ${props.user.user_id}`);
 
-    async function sendRejectRequest() {}
+    async function sendRejectRequest() {
+      const resultRequest = await declineFriendRequest(props.user.user_id);
+
+      setIsLoading(false);
+      if (resultRequest.intendedResult !== undefined) {
+        setOutcomeType(OutcomeType.Accepted);
+      } else {
+        setErrors(
+          mapErrors(resultRequest.errors, 'Accepting', 'Friend Requests'),
+        );
+      }
+    }
 
     setIsLoading(true);
     await sendRejectRequest();
+    setIsLoading(false); // Just in case something blows up
   }, [props.user, setIsLoading]);
 
   if (outcomeType === undefined) {

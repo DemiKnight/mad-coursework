@@ -60,8 +60,8 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
 
 const styles = StyleSheet.create({
   debug: {
-    borderColor: '#09090909',
-    borderWidth: 2,
+    // borderColor: '#09090909',
+    // borderWidth: 2,
   },
   wrapper: {
     flexDirection: 'row',
@@ -85,9 +85,7 @@ const styles = StyleSheet.create({
   },
   emailText: {
     color: '#808080',
-  },
-  stat: {
-    fontWeight: 'bold',
+    fontSize: 10,
   },
   optionButtonWrapper: {
     alignItems: 'center',
@@ -97,8 +95,5 @@ const styles = StyleSheet.create({
     flexBasis: 200,
     borderColor: '#09090909',
     borderWidth: 2,
-  },
-  overlayTest: {
-    flex: 20,
   },
 });
