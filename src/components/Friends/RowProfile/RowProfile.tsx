@@ -3,6 +3,7 @@ import {Avatar, Button, Overlay, Text} from 'react-native-elements';
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
+import {RowProfileStats} from './RowProfileStats';
 
 export type RowProfileProps = {
   target: PublicUser;
@@ -40,14 +41,10 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
         </Text>
         <Text style={styles.emailText}>{target.user_email}</Text>
       </View>
-      <View style={[styles.middleColumn, styles.statsColumn]}>
-        <Text>
-          Posts: <Text style={styles.stat}>{postNumber}</Text>
-        </Text>
-        <Text>
-          Likes: <Text style={styles.stat}>{likesNumber}</Text>
-        </Text>
-      </View>
+      <RowProfileStats
+        user={target}
+        containerStyling={[styles.middleColumn, styles.statsColumn]}
+      />
       <View style={styles.optionButtonWrapper}>{optionsComponent}</View>
     </SafeAreaView>
   );
