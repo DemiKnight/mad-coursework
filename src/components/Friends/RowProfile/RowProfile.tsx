@@ -1,5 +1,5 @@
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
-import {Avatar, Button, Overlay, Text} from 'react-native-elements';
+import {Avatar, Text} from 'react-native-elements';
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
@@ -11,9 +11,7 @@ export type RowProfileProps = {
 };
 
 export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
-  const [profilePic, setProfilePic] = React.useState(undefined);
-  const [postNumber, setPostNumber] = React.useState(2);
-  const [likesNumber, setlikesNumber] = React.useState(33);
+  const [profilePic] = React.useState(undefined);
 
   React.useEffect(() => {}, [profilePic]);
 
@@ -21,23 +19,23 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
     <SafeAreaView style={styles.wrapper}>
       {profilePic === undefined ? (
         <Avatar
-          overlayContainerStyle={{backgroundColor: 'blue'}}
+          overlayContainerStyle={[styles.avatarContainer]}
           size={'medium'}
           rounded
-          containerStyle={[styles.avatarColumn, styles.debug]}
+          containerStyle={[styles.avatarColumn]}
           title={initialsFromUser(target)}
         />
       ) : (
         <Avatar
           rounded
-          containerStyle={[styles.avatarColumn, styles.debug]}
+          containerStyle={[styles.avatarColumn]}
           size={'medium'}
           source={{
             uri: 'https://picsum.photos/200/300',
           }}
         />
       )}
-      <View style={[styles.middleColumn, styles.nameColumn, styles.debug]}>
+      <View style={[styles.middleColumn, styles.nameColumn]}>
         <Text>
           {target.user_givenname} {target.user_familyname}
         </Text>
@@ -45,15 +43,9 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
       </View>
       <RowProfileStats
         user={target}
-        containerStyling={[
-          styles.middleColumn,
-          styles.statsColumn,
-          styles.debug,
-        ]}
+        containerStyling={[styles.middleColumn, styles.statsColumn]}
       />
-      <View style={[styles.optionButtonWrapper, styles.debug]}>
-        {optionsComponent}
-      </View>
+      <View style={[styles.optionButtonWrapper]}>{optionsComponent}</View>
     </SafeAreaView>
   );
 };
@@ -70,6 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarColumn: {},
+  avatarContainer: {
+    backgroundColor: 'blue',
+  },
   nameColumn: {
     flexGrow: 1,
     flexShrink: 1,

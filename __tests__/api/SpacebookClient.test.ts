@@ -1,7 +1,6 @@
 import {createServer} from 'miragejs';
 import {req, Verbs} from '../../src/api/SpacebookClient';
 import {Server} from 'miragejs/server';
-import Keychain from 'react-native-keychain';
 
 let server: Server;
 

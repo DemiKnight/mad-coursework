@@ -13,13 +13,13 @@ export const RowProfileStats = (props: {
   user: PublicUser;
   containerStyling: StyleProp<ViewStyle>;
 }) => {
-  const [numberOfPosts, setNumberOfPosts] = React.useState();
-  const [numberOfPostsLoading, setNumberOfPostsLoading] = React.useState(true);
+  const [numberOfPosts] = React.useState();
+  const [numberOfPostsLoading] = React.useState(true);
 
-  const [numberOfLikes, setNumberOfLikes] = React.useState();
-  const [numberOfLikesLoading, setNumberOfLikesLoading] = React.useState(true);
+  const [numberOfLikes] = React.useState();
+  const [numberOfLikesLoading] = React.useState(true);
 
-  const [errors, setErrors] = React.useState(['Not implemented']);
+  const [errors] = React.useState(['Not implemented']);
 
   if (errors === []) {
     return (

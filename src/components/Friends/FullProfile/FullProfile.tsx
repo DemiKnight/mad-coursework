@@ -1,11 +1,11 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from '../FriendsNav';
 
 type FriendsNavProps = NativeStackScreenProps<FriendStackParams, 'Profile'>;
-export const FullProfile = ({route, navigation}: FriendsNavProps) => {
+export const FullProfile = ({route}: FriendsNavProps) => {
   return (
     <SafeAreaView>
       <View>
@@ -26,8 +26,8 @@ export const FullProfile = ({route, navigation}: FriendsNavProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  profilePic: {},
-  nameText: {},
-  emailText: {},
-});
+// const styles = StyleSheet.create({
+//   profilePic: {},
+//   nameText: {},
+//   emailText: {},
+// });

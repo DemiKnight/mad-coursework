@@ -7,6 +7,8 @@ export function initialsFromUser(target: PublicUser): string {
 }
 
 export function backgroundColourRandom(name: string): string {
+  // TODO
+  console.log(`${name}`);
   return '#222222';
 }
 

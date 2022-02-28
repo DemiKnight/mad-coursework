@@ -3,5 +3,7 @@ export function mapErrors<Err>(
   actionName?: string,
   resourceName?: string,
 ): Array<string> {
+  // todo This
+  console.log(`${error} ${actionName} ${resourceName}`);
   return ['x'];
 }
