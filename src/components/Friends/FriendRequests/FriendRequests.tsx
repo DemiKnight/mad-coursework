@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
+import {SafeAreaView, VirtualizedList} from 'react-native';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
 import {getFriendRequests} from '../../../api/Friends';
@@ -7,6 +7,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from '../FriendsNav';
 import {FriendRequestOptions} from './FriendRequestOptions';
 import {EmptyListPlaceholder} from '../../Common/EmptyListPlaceholder';
+import CommonStyles from '../../Common/CommonStyles';
 
 export type FriendRequestsProps = NativeStackScreenProps<
   FriendStackParams,
@@ -31,7 +32,11 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
   }, [setFriendRequestList]);
 
   if (friendRequestList.length === 0) {
-    return <EmptyListPlaceholder />;
+    return (
+      <SafeAreaView style={CommonStyles.centreColumn}>
+        <EmptyListPlaceholder />
+      </SafeAreaView>
+    );
   }
 
   return (

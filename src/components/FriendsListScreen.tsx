@@ -3,11 +3,12 @@ import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
-import {Button} from 'react-native-elements';
+import {Button, Divider} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from './Friends/FriendsNav';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {EmptyListPlaceholder} from './Common/EmptyListPlaceholder';
+import CommonStyles from './Common/CommonStyles';
 
 type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
 export const FriendsListScreen = ({navigation}: FriendsListProps) => {
@@ -30,7 +31,11 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   }, [setFriendListData]);
 
   if (friendListData.length === 0) {
-    return <EmptyListPlaceholder />;
+    return (
+      <SafeAreaView style={CommonStyles.centreColumn}>
+        <EmptyListPlaceholder />
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -42,20 +47,23 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
         keyExtractor={(item, _) => String(item.user_id)}
         getItemCount={x => x.length}
         renderItem={item => (
-          <RowProfile
-            target={item.item}
-            optionsComponent={
-              <View style={styles.profileOptions}>
-                <Button
-                  icon={<Icon name="eyeo" size={20} />}
-                  type="outline"
-                  onPress={() =>
-                    navigation.navigate('Profile', {user: item.item})
-                  }
-                />
-              </View>
-            }
-          />
+          <>
+            <RowProfile
+              target={item.item}
+              optionsComponent={
+                <View style={styles.profileOptions}>
+                  <Button
+                    icon={<Icon name="eyeo" size={20} />}
+                    type="outline"
+                    onPress={() =>
+                      navigation.navigate('Profile', {user: item.item})
+                    }
+                  />
+                </View>
+              }
+            />
+            <Divider />
+          </>
         )}
       />
     </SafeAreaView>

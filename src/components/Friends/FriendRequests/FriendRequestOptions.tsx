@@ -53,7 +53,7 @@ export const FriendRequestOptions = (props: {
 
       setIsLoading(false);
       if (resultRequest.intendedResult !== undefined) {
-        setOutcomeType(OutcomeType.Accepted);
+        setOutcomeType(OutcomeType.Rejected);
       } else {
         setErrors(
           mapErrors(resultRequest.errors, 'Accepting', 'Friend Requests'),
@@ -119,7 +119,6 @@ export const FriendRequestOptions = (props: {
 const styles = StyleSheet.create({
   profileControls: {
     flexDirection: 'row',
-    // justifyContent: 'center',
   },
   errorText: {
     color: 'red',

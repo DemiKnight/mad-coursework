@@ -89,11 +89,8 @@ const styles = StyleSheet.create({
   },
   optionButtonWrapper: {
     alignItems: 'center',
-    // flex: 2,
     flexGrow: 0,
     flexShrink: 1,
     flexBasis: 200,
-    borderColor: '#09090909',
-    borderWidth: 2,
   },
 });
