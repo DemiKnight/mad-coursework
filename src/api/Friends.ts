@@ -131,14 +131,14 @@ export async function addFriend(
     const responseStr = JSON.stringify(response);
 
     switch (response.status) {
-      case 200:
+      case 201:
         console.info(`Successfully sent friend request: ${responseStr}`);
         return ok(true);
       case 404:
         console.error(`User wasn't found: ${responseStr}`);
         return errorResp(CommonHTTPErrors.NotFound);
       case 403:
-        console.error(`User already friends ${responseStr}`);
+        console.warn(`User already friends ${responseStr}`);
         return errorResp(CommonAppErrors.FriendAlreadyAdded);
       case 401:
         console.error(`Unauthorised whilst adding friend: ${responseStr}`);
