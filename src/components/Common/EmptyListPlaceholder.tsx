@@ -3,7 +3,7 @@ import {Text} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
 
 export const EmptyListPlaceholder = () => {
-  return <Text style={styles.emptyListText}>Nothing here but us chickens</Text>;
+  return <Text style={styles.emptyListText}>Nobody here but us chickens</Text>;
 };
 const styles = StyleSheet.create({
   emptyListText: {
