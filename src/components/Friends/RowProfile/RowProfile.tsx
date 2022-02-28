@@ -79,12 +79,9 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   statsColumn: {
-    // flex: 1,
     flexShrink: 0,
     flexGrow: 0,
     flexBasis: 80,
-    // flexShrink: 1,
-    // width: 20,
   },
   emailText: {
     color: '#808080',

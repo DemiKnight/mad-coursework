@@ -47,7 +47,7 @@ export const RowProfileStats = (props: {
       </View>
     );
   } else {
-    return <></>;
+    return null;
   }
 };
 
