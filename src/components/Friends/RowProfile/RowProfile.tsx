@@ -24,18 +24,20 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
           overlayContainerStyle={{backgroundColor: 'blue'}}
           size={'medium'}
           rounded
+          containerStyle={[styles.avatarColumn, styles.debug]}
           title={initialsFromUser(target)}
         />
       ) : (
         <Avatar
           rounded
+          containerStyle={[styles.avatarColumn, styles.debug]}
           size={'medium'}
           source={{
             uri: 'https://picsum.photos/200/300',
           }}
         />
       )}
-      <View style={styles.middleColumn}>
+      <View style={[styles.middleColumn, styles.nameColumn, styles.debug]}>
         <Text>
           {target.user_givenname} {target.user_familyname}
         </Text>
@@ -43,26 +45,46 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
       </View>
       <RowProfileStats
         user={target}
-        containerStyling={[styles.middleColumn, styles.statsColumn]}
+        containerStyling={[
+          styles.middleColumn,
+          styles.statsColumn,
+          styles.debug,
+        ]}
       />
-      <View style={styles.optionButtonWrapper}>{optionsComponent}</View>
+      <View style={[styles.optionButtonWrapper, styles.debug]}>
+        {optionsComponent}
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  debug: {
+    borderColor: '#09090909',
+    borderWidth: 2,
+  },
   wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 2,
+    flex: 1,
+  },
+  avatarColumn: {},
+  nameColumn: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexWrap: 'nowrap',
   },
   middleColumn: {
     marginLeft: 4,
-    flexGrow: 1,
-    flex: 2,
   },
   statsColumn: {
-    flex: 1,
+    // flex: 1,
+    flexShrink: 0,
+    flexGrow: 0,
+    flexBasis: 80,
+    // flexShrink: 1,
+    // width: 20,
   },
   emailText: {
     color: '#808080',
@@ -72,8 +94,12 @@ const styles = StyleSheet.create({
   },
   optionButtonWrapper: {
     alignItems: 'center',
-    flexGrow: 1,
-    flex: 1,
+    // flex: 2,
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: 200,
+    borderColor: '#09090909',
+    borderWidth: 2,
   },
   overlayTest: {
     flex: 20,
