@@ -6,6 +6,7 @@ import {getFriendRequests} from '../../../api/Friends';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from '../FriendsNav';
 import {FriendRequestOptions} from './FriendRequestOptions';
+import {EmptyListPlaceholder} from '../../Common/EmptyListPlaceholder';
 
 export type FriendRequestsProps = NativeStackScreenProps<
   FriendStackParams,
@@ -29,6 +30,10 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
     obtainFriendRequestData();
   }, [setFriendRequestList]);
 
+  if (friendRequestList.length === 0) {
+    return <EmptyListPlaceholder />;
+  }
+
   return (
     <SafeAreaView>
       <VirtualizedList<PublicUser>
@@ -49,10 +54,3 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  profileControls: {
-    flexDirection: 'row',
-    // justifyContent: 'center',
-  },
-});

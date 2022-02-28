@@ -16,6 +16,9 @@ export const FullProfile = ({route, navigation}: FriendsNavProps) => {
         <Text>{route.params.user.user_email}</Text>
       </View>
       <View>
+        <Text>List of friends... or not if person isn't a friend.</Text>
+      </View>
+      <View>
         <Text>Posts here..</Text>
       </View>
     </SafeAreaView>

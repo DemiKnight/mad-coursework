@@ -1,23 +1,19 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, VirtualizedList} from 'react-native';
+import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
-import {Button, Overlay} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from './Friends/FriendsNav';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {EmptyListPlaceholder} from './Common/EmptyListPlaceholder';
 
 type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
 export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   const [friendListData, setFriendListData] = React.useState<Array<PublicUser>>(
     [],
   );
-  const [optionsVisible, setOptionsVisible] = React.useState(false);
-
-  const toggleOptions = React.useCallback(() => {
-    setOptionsVisible(!optionsVisible);
-  }, [setOptionsVisible, optionsVisible]);
-
   React.useEffect(() => {
     async function dataFn() {
       getFriendList(1).then(response => {
@@ -33,6 +29,10 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
     dataFn();
   }, [setFriendListData]);
 
+  if (friendListData.length === 0) {
+    return <EmptyListPlaceholder />;
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <VirtualizedList<PublicUser>
@@ -45,27 +45,15 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
           <RowProfile
             target={item.item}
             optionsComponent={
-              <>
+              <View style={styles.profileOptions}>
                 <Button
-                  title={'...'}
-                  buttonStyle={styles.optionsButton}
-                  onPress={toggleOptions}
+                  icon={<Icon name="eyeo" size={20} />}
+                  type="outline"
+                  onPress={() =>
+                    navigation.navigate('Profile', {user: item.item})
+                  }
                 />
-                <Overlay
-                  style={styles.overlayTest}
-                  isVisible={optionsVisible}
-                  onBackdropPress={toggleOptions}>
-                  <Button
-                    title={'View'}
-                    onPress={() => {
-                      setOptionsVisible(false);
-                      navigation.navigate('Profile', {
-                        user: item.item,
-                      });
-                    }}
-                  />
-                </Overlay>
-              </>
+              </View>
             }
           />
         )}
@@ -91,5 +79,8 @@ const styles = StyleSheet.create({
   },
   item: {
     marginBottom: 2,
+  },
+  profileOptions: {
+    flexDirection: 'row',
   },
 });
