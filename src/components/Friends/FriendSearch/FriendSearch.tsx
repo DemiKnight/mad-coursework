@@ -6,14 +6,7 @@ import {
   View,
   VirtualizedList,
 } from 'react-native';
-import {
-  Button,
-  Divider,
-  Overlay,
-  SearchBar,
-  Switch,
-  Text,
-} from 'react-native-elements';
+import {Divider, SearchBar, Switch, Text} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {search} from '../../../api/Search';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -22,7 +15,7 @@ import {EmptyListPlaceholder} from '../../Common/EmptyListPlaceholder';
 import CommonStyles from '../../Common/CommonStyles';
 import {FriendSearchOptions} from './FriendSearchOptions';
 import {mapErrors} from '../../../api/RequestUtils';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {ErrorButton} from '../../Common/ErrorButton';
 
 type FriendSearchProps = NativeStackScreenProps<FriendStackParams, 'Search'>;
 export const FriendSearch = ({navigation}: FriendSearchProps) => {
@@ -33,7 +26,6 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   );
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
-  const [errorOverlayVisible, setErrorOverlayVisible] = React.useState(false);
   const [errors, setErrors] = React.useState<Array<string>>([]);
 
   const onRefresh = React.useCallback(async () => {
@@ -73,25 +65,7 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
           value={isPublicSearch}
           onChange={() => setIsPublicSearch(!isPublicSearch)}
         />
-        {errors.length !== 0 && (
-          <>
-            <Button
-              type="outline"
-              onPress={() => setErrorOverlayVisible(true)}
-              icon={<Icon name="warning" color="red" size={20} />}
-            />
-            <Overlay
-              isVisible={errorOverlayVisible}
-              onBackdropPress={() => setErrorOverlayVisible(false)}>
-              <Text>Errors</Text>
-              {errors.map(errorStr => (
-                <Text key={errorStr} style={styles.errorText}>
-                  {errorStr}
-                </Text>
-              ))}
-            </Overlay>
-          </>
-        )}
+        <ErrorButton errors={errors} />
       </View>
 
       <Divider />

@@ -8,6 +8,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack/src/type
 import {FriendStackParams} from '../FriendsNav';
 import {addFriend} from '../../../api/Friends';
 import {mapErrors} from '../../../api/RequestUtils';
+import {ErrorButton} from '../../Common/ErrorButton';
 
 enum FriendRequestStatus {
   RequestSent,
@@ -21,7 +22,6 @@ export const FriendSearchOptions = (props: {
   nav: NativeStackNavigationProp<FriendStackParams, 'Search'>;
 }) => {
   const [errors, setErrors] = React.useState<Array<string>>([]);
-  const [errorOverlayVisible, setErrorOverlayVisible] = React.useState(false);
   const [friendRequestStatus, setFriendRequestStatus] =
     React.useState<FriendRequestStatus>(FriendRequestStatus.Unknown);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -55,24 +55,7 @@ export const FriendSearchOptions = (props: {
         target={props.user}
         optionsComponent={
           <View style={styles.profileOptions}>
-            {errors.length !== 0 && (
-              <>
-                <Button
-                  icon={<Icon name="warning" color="red" size={20} />}
-                  onPress={() => setErrorOverlayVisible(true)}
-                  type={'clear'}
-                />
-                <Overlay
-                  isVisible={errorOverlayVisible}
-                  onBackdropPress={() => setErrorOverlayVisible(false)}>
-                  {errors.map(errorStr => (
-                    <Text key={errorStr} style={styles.errorText}>
-                      {errorStr}
-                    </Text>
-                  ))}
-                </Overlay>
-              </>
-            )}
+            <ErrorButton errors={errors} />
             <Button
               icon={<Icon name="eyeo" size={20} />}
               type="outline"

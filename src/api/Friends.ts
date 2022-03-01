@@ -108,7 +108,7 @@ export async function getFriendList(
         console.error(`Requested list is wasn't found ${responseStr}`);
         return errorResp(AppErrors.NotFound);
       case 403:
-        console.error(`Requested friend list isn't visible ${responseStr}`);
+        console.warn(`Requested friend list isn't visible ${responseStr}`);
         return errorResp(AppErrors.FriendListVisibility);
       case 401:
         console.error(
