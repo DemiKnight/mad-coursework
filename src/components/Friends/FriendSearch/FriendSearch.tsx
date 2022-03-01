@@ -1,5 +1,11 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
+import {
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  VirtualizedList,
+} from 'react-native';
 import {Divider, SearchBar, Switch, Text} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {search} from '../../../api/Search';
@@ -16,6 +22,22 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   const [searchResults, setSearchResults] = React.useState<Array<PublicUser>>(
     [],
   );
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    async function getSearchResults() {
+      const scope = isPublicSearch ? 'all' : 'friends';
+      const request = await search(query, scope);
+      if (request.intendedResult !== undefined) {
+        setSearchResults(request.intendedResult);
+      } else {
+        // TODO
+      }
+    }
+    await getSearchResults();
+    setRefreshing(false);
+  }, [setRefreshing, isPublicSearch, query]);
 
   React.useEffect(() => {
     async function getSearchResults() {
@@ -27,7 +49,6 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
         // TODO
       }
     }
-
     if (query?.trim() !== '') {
       getSearchResults();
     } else {
@@ -36,10 +57,11 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   }, [query, isPublicSearch]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.wrapper}>
       <SearchBar
         placeholder={`${isPublicSearch ? 'Public' : 'Friend'} search...`}
         platform="ios"
+        // @ts-ignore
         onChangeText={(str: string) => setQuery(str)}
         value={query}
       />
@@ -63,6 +85,9 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
           getItem={(data: Array<PublicUser>, index) => data[index]}
           keyExtractor={(item, _) => String(item.user_id)}
           getItemCount={x => x.length}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           renderItem={item => (
             <FriendSearchOptions
               isPublicSearch={isPublicSearch}
@@ -77,6 +102,9 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   profileOptions: {
     flexDirection: 'row',
   },

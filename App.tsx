@@ -11,7 +11,6 @@ import {
   RegisterResponse,
 } from './src/services/utils/SpacebookRequests';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TimelineScreen} from './src/components/TimelineScreen';
 import {SettingsScreen} from './src/components/SettingsScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
@@ -19,7 +18,6 @@ import {FriendsNav} from './src/components/Friends/FriendsNav';
 
 export type RootStackParams = {
   Home: undefined;
-  Timeline: undefined;
   Settings: undefined;
   Friends: undefined;
 };
@@ -147,7 +145,6 @@ const App = () => {
           {state.userToken !== undefined ? (
             <TabNav.Navigator initialRouteName="Home">
               <TabNav.Screen name="Home" component={Home} />
-              <TabNav.Screen name="Timeline" component={TimelineScreen} />
               <TabNav.Screen
                 name="Friends"
                 component={FriendsNav}
