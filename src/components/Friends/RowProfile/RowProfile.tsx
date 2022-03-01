@@ -1,9 +1,10 @@
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {Avatar, Text} from 'react-native-elements';
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {ImageURISource, SafeAreaView, StyleSheet, View} from 'react-native';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
 import {RowProfileStats} from './RowProfileStats';
+import {getUserProfilePicture} from '../../../api/User';
 
 export type RowProfileProps = {
   target: PublicUser;
@@ -11,9 +12,21 @@ export type RowProfileProps = {
 };
 
 export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
-  const [profilePic] = React.useState(undefined);
+  const [profilePic, setProfilePicture] = React.useState<string | undefined>(
+    undefined,
+  );
 
-  React.useEffect(() => {}, [profilePic]);
+  React.useLayoutEffect(() => {
+    async function getProfilePicture() {
+      const request = await getUserProfilePicture(target.user_id);
+      if (request.intendedResult !== undefined) {
+        setProfilePicture(request.intendedResult);
+      }
+    }
+    if (profilePic === undefined) {
+      getProfilePicture();
+    }
+  }, [profilePic, target.user_id]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -31,7 +44,7 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
           containerStyle={[styles.avatarColumn]}
           size={'medium'}
           source={{
-            uri: 'https://picsum.photos/200/300',
+            uri: profilePic,
           }}
         />
       )}
@@ -51,10 +64,6 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
 };
 
 const styles = StyleSheet.create({
-  debug: {
-    // borderColor: '#09090909',
-    // borderWidth: 2,
-  },
   wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
