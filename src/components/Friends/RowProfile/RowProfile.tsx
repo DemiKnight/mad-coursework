@@ -36,13 +36,11 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
           overlayContainerStyle={[styles.avatarContainer]}
           size={'medium'}
           rounded
-          containerStyle={[styles.avatarColumn]}
           title={initialsFromUser(target)}
         />
       ) : (
         <Avatar
           rounded
-          containerStyle={[styles.avatarColumn]}
           size={'medium'}
           source={{
             uri: profilePic,
@@ -71,7 +69,6 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     flex: 1,
   },
-  avatarColumn: {},
   avatarContainer: {
     backgroundColor: 'blue',
   },

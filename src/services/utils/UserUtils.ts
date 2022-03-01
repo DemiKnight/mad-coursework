@@ -3,6 +3,9 @@ import {FriendRequestUser, PublicUser} from './SpacebookRequests';
 export function initialsFromUser(target: PublicUser): string {
   const firstName = target?.user_givenname?.charAt(0);
   const lastName = target?.user_familyname?.charAt(0);
+  console.debug(
+    `${(firstName || '') + (lastName || '')} ${JSON.stringify(target)}`,
+  );
   return (firstName || '') + (lastName || '');
 }
 
