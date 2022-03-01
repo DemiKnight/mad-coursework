@@ -9,12 +9,13 @@ import {
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
-import {Button, Divider} from 'react-native-elements';
+import {Button, Divider, Overlay, Text} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from './Friends/FriendsNav';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {EmptyListPlaceholder} from './Common/EmptyListPlaceholder';
 import CommonStyles from './Common/CommonStyles';
+import {mapErrors} from '../api/RequestUtils';
 
 type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
 export const FriendsListScreen = ({navigation}: FriendsListProps) => {
@@ -22,16 +23,17 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
     [],
   );
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
+  const [errors, setErrors] = React.useState<Array<string>>([]);
+  const [errorOverlayVisible, setErrorOverlayVisible] = React.useState(false);
+
   const onRefresh = React.useCallback(async () => {
     async function dataFn() {
-      getFriendList(1).then(response => {
-        if (response.intendedResult !== undefined) {
-          console.log(response.intendedResult);
-          setFriendListData(response.intendedResult);
-        } else {
-          // TODO Handle failure cases
-        }
-      });
+      const request = await getFriendList(1);
+      if (request.intendedResult !== undefined) {
+        setFriendListData(request.intendedResult);
+      } else {
+        setErrors(mapErrors(request.errors));
+      }
     }
 
     await dataFn();
@@ -53,41 +55,69 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <VirtualizedList<PublicUser>
-        data={friendListData}
-        initialNumToRender={20}
-        getItem={(data: Array<PublicUser>, index) => data[index]}
-        keyExtractor={(item, _) => String(item.user_id)}
-        getItemCount={x => x.length}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
-              setRefreshing(true);
-              onRefresh();
-            }}
+      {errors.length !== 0 && (
+        <>
+          <Button
+            type="outline"
+            onPress={() => setErrorOverlayVisible(true)}
+            icon={<Icon name="warning" color="red" size={20} />}
           />
-        }
-        renderItem={item => (
-          <>
-            <RowProfile
-              target={item.item}
-              optionsComponent={
-                <View style={styles.profileOptions}>
-                  <Button
-                    icon={<Icon name="eyeo" size={20} />}
-                    type="outline"
-                    onPress={() =>
-                      navigation.navigate('Profile', {user: item.item})
-                    }
-                  />
-                </View>
-              }
+          <Overlay
+            isVisible={errorOverlayVisible}
+            onBackdropPress={() => setErrorOverlayVisible(false)}>
+            <Text>Errors</Text>
+            {errors.map(errorStr => (
+              <Text key={errorStr} style={styles.errorText}>
+                {errorStr}
+              </Text>
+            ))}
+          </Overlay>
+          <Divider />
+        </>
+      )}
+
+      {friendListData.length === 0 ? (
+        <>
+          <EmptyListPlaceholder />
+          <Button title="Refresh" onPress={onRefresh} />
+        </>
+      ) : (
+        <VirtualizedList<PublicUser>
+          data={friendListData}
+          initialNumToRender={20}
+          getItem={(data: Array<PublicUser>, index) => data[index]}
+          keyExtractor={(item, _) => String(item.user_id)}
+          getItemCount={x => x.length}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+                onRefresh();
+              }}
             />
-            <Divider />
-          </>
-        )}
-      />
+          }
+          renderItem={item => (
+            <>
+              <RowProfile
+                target={item.item}
+                optionsComponent={
+                  <View style={styles.profileOptions}>
+                    <Button
+                      icon={<Icon name="eyeo" size={20} />}
+                      type="outline"
+                      onPress={() =>
+                        navigation.navigate('Profile', {user: item.item})
+                      }
+                    />
+                  </View>
+                }
+              />
+              <Divider />
+            </>
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -112,5 +142,8 @@ const styles = StyleSheet.create({
   },
   profileOptions: {
     flexDirection: 'row',
+  },
+  errorText: {
+    color: 'red',
   },
 });

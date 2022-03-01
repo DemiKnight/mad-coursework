@@ -1,7 +1,7 @@
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {Avatar, Text} from 'react-native-elements';
 import React from 'react';
-import {ImageURISource, SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
 import {RowProfileStats} from './RowProfileStats';
 import {getUserProfilePicture} from '../../../api/User';
@@ -16,7 +16,7 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
     undefined,
   );
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     async function getProfilePicture() {
       const request = await getUserProfilePicture(target.user_id);
       if (request.intendedResult !== undefined) {
