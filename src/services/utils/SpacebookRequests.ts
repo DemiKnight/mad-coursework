@@ -17,6 +17,7 @@ export enum AppErrors {
   PostModifyAccess,
   PostAlreadyLiked,
   PostAlreadyUnliked,
+  UnknownError,
 }
 
 export type SuccessT<T> = T;
@@ -73,7 +74,7 @@ export type GetFriendRequestsError =
   | AppErrors.Unauthorised
   | AppErrors.BadRequest;
 
-export type AcceptFriendRequestError =
+export type SendFriendRequestError =
   | AppErrors.Server_Error
   | AppErrors.NotFound
   | AppErrors.Unauthorised;

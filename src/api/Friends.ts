@@ -1,6 +1,6 @@
 import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 import {
-  AcceptFriendRequestError,
+  SendFriendRequestError,
   AddFriendErrors,
   AppErrors,
   FriendRequestUser,
@@ -38,7 +38,7 @@ export async function getFriendRequests(): Promise<
 
 export async function acceptFriendRequest(
   userId: number,
-): Promise<Handler<AcceptFriendRequestError, Success>> {
+): Promise<Handler<SendFriendRequestError, Success>> {
   console.info(`accept friend request for ${userId}`);
   const result = await req(`friendrequests/${userId}`, Verbs.POST);
 
@@ -63,7 +63,9 @@ export async function acceptFriendRequest(
   });
 }
 
-export async function declineFriendRequest(userId: number) {
+export async function declineFriendRequest(
+  userId: number,
+): Promise<Handler<SendFriendRequestError, Success>> {
   console.info(`Decline Friend Request for ${userId}`);
   const result = await req(`friendrequests/${userId}`, Verbs.DELETE);
 

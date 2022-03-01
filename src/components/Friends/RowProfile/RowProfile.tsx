@@ -23,6 +23,7 @@ export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
         setProfilePicture(request.intendedResult);
       }
     }
+    // Any other errors, we'll just default to user initials.
     if (profilePic === undefined) {
       getProfilePicture();
     }

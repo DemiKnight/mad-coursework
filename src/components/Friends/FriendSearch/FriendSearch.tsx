@@ -43,7 +43,7 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
       if (request.intendedResult !== undefined) {
         setSearchResults(request.intendedResult);
       } else {
-        setErrors(mapErrors(request.errors));
+        setErrors(mapErrors(request.errors, 'Getting', 'Search results'));
       }
     }
     await getSearchResults();

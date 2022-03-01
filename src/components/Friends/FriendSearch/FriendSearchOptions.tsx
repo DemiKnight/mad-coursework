@@ -1,9 +1,6 @@
 import React from 'react';
 import {Button, Divider, Overlay, Text} from 'react-native-elements';
-import {
-  CommonAppErrors,
-  PublicUser,
-} from '../../../services/utils/SpacebookRequests';
+import {AppErrors, PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -39,7 +36,7 @@ export const FriendSearchOptions = (props: {
         setFriendRequestStatus(FriendRequestStatus.RequestSent);
       } else {
         switch (request.errors) {
-          case CommonAppErrors.FriendAlreadyAdded:
+          case AppErrors.FriendAlreadyAdded:
             setFriendRequestStatus(FriendRequestStatus.AlreadyFriend);
             setErrors(['User already friend or existing friend request.']);
             break;
