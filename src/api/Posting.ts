@@ -1,6 +1,5 @@
 import {
-  CommonAppErrors,
-  CommonHTTPErrors,
+  AppErrors,
   GetPostErrors,
   GetPostListErrors,
   LikePostErrors,
@@ -78,25 +77,25 @@ export async function getListOfPosts(
         console.error(
           `Unauthorised whilst getting list of post: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(`Post visibility issue ${responseStr}`);
-        return errorResp(CommonAppErrors.PostVisibility);
+        return errorResp(AppErrors.PostVisibility);
       case 404:
         console.error(
           `User not found whilst getting list of posts: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(
           `Server error whilst getting list of posts: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst getting list of posts: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -117,20 +116,20 @@ export async function addNewPost(
         return ok(true);
       case 401:
         console.error(`Unauthorised whilst creating new post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 404:
         console.error(
           `User not found whilst creating new post: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst creating new post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst creating new post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -150,21 +149,21 @@ export async function getPost(
         return ok(body);
       case 401:
         console.error(`Unauthorised whilst getting post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(`Post visibility issue ${responseStr}`);
-        return errorResp(CommonAppErrors.PostVisibility);
+        return errorResp(AppErrors.PostVisibility);
       case 404:
         console.error(`Post or user not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst getting post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst getting post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -183,23 +182,23 @@ export async function removePost(
         return ok(true);
       case 401:
         console.error(`Unauthorised whilst removing post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(
           `Post not associated with user, unable to remove: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.PostDeleteAccess);
+        return errorResp(AppErrors.PostDeleteAccess);
       case 404:
         console.error(`Post or user not found: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst removing post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst removing post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -229,24 +228,24 @@ export async function updatePost(
         return ok(true);
       case 400:
         console.error(`Bad request whilst updating post ${responseStr}`);
-        return errorResp(CommonHTTPErrors.BadRequest);
+        return errorResp(AppErrors.BadRequest);
       case 401:
         console.error(`Unauthorised whilst updating post ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(`Post not associated with user, ${responseStr}`);
-        return errorResp(CommonAppErrors.PostModifyAccess);
+        return errorResp(AppErrors.PostModifyAccess);
       case 404:
         console.error(`Post or user not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst updating post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst updating post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -264,21 +263,21 @@ export async function likePost(
         return ok(true);
       case 401:
         console.error(`Unauthorised whilst liking post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(`Post already liked: ${responseStr}`);
-        return errorResp(CommonAppErrors.PostAlreadyLiked);
+        return errorResp(AppErrors.PostAlreadyLiked);
       case 404:
         console.error(`Post or user not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst liking post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst liking post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -296,21 +295,21 @@ export async function unlikePost(
         return ok(true);
       case 401:
         console.error(`Unauthorised whilst unliking post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 403:
         console.error(`Post already unliked: ${responseStr}`);
-        return errorResp(CommonAppErrors.PostAlreadyUnliked);
+        return errorResp(AppErrors.PostAlreadyUnliked);
       case 404:
         console.error(`Post or user not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Server error whilst unliking post: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst unliking post: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }

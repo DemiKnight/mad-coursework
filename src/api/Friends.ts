@@ -2,8 +2,7 @@ import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 import {
   AcceptFriendRequestError,
   AddFriendErrors,
-  CommonAppErrors,
-  CommonHTTPErrors,
+  AppErrors,
   FriendRequestUser,
   FriendsListErrors,
   GetFriendRequestsError,
@@ -29,10 +28,10 @@ export async function getFriendRequests(): Promise<
         console.error(
           `Unauthorised whilst getting friend requests: ${responseString}`,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       default:
         console.error(`Error from server ${responseString}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
     }
   });
 }
@@ -51,15 +50,15 @@ export async function acceptFriendRequest(
         return ok(true);
       case 404:
         console.error(`Friend request to accept not found: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 401:
         console.error(
           `Unauthorised whilst accepting friend request: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       default:
         console.error(`Error from server ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
     }
   });
 }
@@ -76,15 +75,15 @@ export async function declineFriendRequest(userId: number) {
         return ok(true);
       case 404:
         console.error(`Friend request to accept not found: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 401:
         console.error(
           `Unauthorised whilst accepting friend request: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       default:
         console.error(`Error from server ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
     }
   });
 }
@@ -105,18 +104,18 @@ export async function getFriendList(
         return ok(body);
       case 404:
         console.error(`Requested list is wasn't found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 403:
         console.error(`Requested friend list isn't visible ${responseStr}`);
-        return errorResp(CommonAppErrors.FriendListVisibility);
+        return errorResp(AppErrors.FriendListVisibility);
       case 401:
         console.error(
           `Unauthorised whilst retrieving friend list ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       default:
         console.error(`Error from server ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
     }
   });
 }
@@ -136,16 +135,16 @@ export async function addFriend(
         return ok(true);
       case 404:
         console.error(`User wasn't found: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 403:
         console.warn(`User already friends ${responseStr}`);
-        return errorResp(CommonAppErrors.FriendAlreadyAdded);
+        return errorResp(AppErrors.FriendAlreadyAdded);
       case 401:
         console.error(`Unauthorised whilst adding friend: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       default:
         console.error(`Error from server ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
     }
   });
 }

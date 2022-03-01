@@ -1,7 +1,6 @@
 import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 import {
-  CommonAppErrors,
-  CommonHTTPErrors,
+  AppErrors,
   GetProfilePictureErrors,
   GetUserInfoErrors,
   PostProfilePictureErrors,
@@ -28,15 +27,15 @@ export async function getUserInfo(
         return ok(body);
       case 404:
         console.error(`User not found: ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 401:
         console.error(`Unauthorised for finding users ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 500:
         console.error(`Unknown server error ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -71,22 +70,22 @@ export async function updateUserInfo(
         return ok(true);
       case 404:
         console.error(`User id not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 403:
         console.error(`Forbidden when updating user ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Forbidden);
+        return errorResp(AppErrors.Forbidden);
       case 401:
         console.error(`Unauthorised request for user ${userId} ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 400:
         console.error(`Bad Request ${responseStr}`);
-        return errorResp(CommonHTTPErrors.BadRequest);
+        return errorResp(AppErrors.BadRequest);
       case 500:
         console.error(`Unknown server error ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(`Unknown response from server ${responseStr}`);
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -111,16 +110,16 @@ export async function getUserProfilePicture(
         return ok(urlPhoto);
       case 401:
         console.error(`Unauthorised request for user ${userId} ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 404:
         console.error(`User id not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Error server error ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(`Unknown response from server ${responseStr}`);
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
@@ -149,19 +148,19 @@ export async function changeUserProfilePicture(
         return ok(true);
       case 400:
         console.error(`Bad request when uploading photo ${responseStr}`);
-        return errorResp(CommonHTTPErrors.BadRequest);
+        return errorResp(AppErrors.BadRequest);
       case 401:
         console.error(`Unauthorised request for user ${userId} ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 404:
         console.error(`User id (${userId}) not found ${responseStr}`);
-        return errorResp(CommonHTTPErrors.NotFound);
+        return errorResp(AppErrors.NotFound);
       case 500:
         console.error(`Error server error ${responseStr}`);
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(`Unknown response from server ${responseStr}`);
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }
