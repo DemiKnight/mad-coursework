@@ -7,8 +7,7 @@ import {
   Verbs,
 } from './SpacebookClient';
 import {
-  CommonAppErrors,
-  CommonHTTPErrors,
+  AppErrors,
   PaginationOption,
   PublicUser,
   SearchErrors,
@@ -42,22 +41,22 @@ export async function search(
         console.error(
           `Bad request whilst searching for friends" ${responseStr} `,
         );
-        return errorResp(CommonHTTPErrors.BadRequest);
+        return errorResp(AppErrors.BadRequest);
       case 401:
         console.error(
           `Unauthorised whilst searching for friends" ${responseStr} `,
         );
-        return errorResp(CommonHTTPErrors.Unauthorised);
+        return errorResp(AppErrors.Unauthorised);
       case 500:
         console.error(
           `Server error whilst searching for friends: ${responseStr}`,
         );
-        return errorResp(CommonHTTPErrors.Server_Error);
+        return errorResp(AppErrors.Server_Error);
       default:
         console.error(
           `Unknown HTTP response whilst searching for friends: ${responseStr}`,
         );
-        return errorResp(CommonAppErrors.UnknownHttpError);
+        return errorResp(AppErrors.UnknownHttpError);
     }
   });
 }

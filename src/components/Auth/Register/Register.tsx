@@ -35,7 +35,7 @@ export const Register = ({navigation}: RegisterProps) => {
   );
 
   const handleResponse = async (
-    fn: Promise<Handler<RegisterResponse, RegisterErrors>>,
+    fn: Promise<Handler<RegisterErrors, RegisterResponse>>,
   ) => {
     const result = await fn;
     setIsLoading(false);

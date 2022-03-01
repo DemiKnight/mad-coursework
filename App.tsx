@@ -11,17 +11,17 @@ import {
   RegisterResponse,
 } from './src/services/utils/SpacebookRequests';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TimelineScreen} from './src/components/TimelineScreen';
 import {SettingsScreen} from './src/components/SettingsScreen';
-import {FriendsListScreen} from './src/components/FriendsListScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
+import {FriendsNav} from './src/components/Friends/FriendsNav';
+
 export type RootStackParams = {
   Home: undefined;
-  Timeline: undefined;
   Settings: undefined;
   Friends: undefined;
 };
+
 const TabNav = createBottomTabNavigator<RootStackParams>();
 
 export type AuthContextT = {
@@ -52,6 +52,11 @@ const App = () => {
   });
 
   React.useEffect(() => {
+    // We use Hermes, log whether it's enabled (it should always be)
+    // @ts-ignore
+    console.debug(`Is Hermes enabled? ${!!global.HermesInternal}`);
+
+    // When app loads, obtain token.
     const obtainAuthToken = async () => {
       const store: false | UserCredentials =
         await Keychain.getGenericPassword();
@@ -133,9 +138,6 @@ const App = () => {
     [],
   );
 
-  // @ts-ignore
-  console.info(`Is Hermes enabled? ${!!global.HermesInternal}`);
-
   return (
     <SafeAreaProvider>
       <NavigationContainer>
@@ -143,8 +145,11 @@ const App = () => {
           {state.userToken !== undefined ? (
             <TabNav.Navigator initialRouteName="Home">
               <TabNav.Screen name="Home" component={Home} />
-              <TabNav.Screen name="Timeline" component={TimelineScreen} />
-              <TabNav.Screen name="Friends" component={FriendsListScreen} />
+              <TabNav.Screen
+                name="Friends"
+                component={FriendsNav}
+                options={{headerShown: false}}
+              />
               <TabNav.Screen name="Settings" component={SettingsScreen} />
             </TabNav.Navigator>
           ) : (

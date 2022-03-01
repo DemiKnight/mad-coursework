@@ -1,14 +1,13 @@
 // General Errors
 
-export enum CommonHTTPErrors {
+export enum AppErrors {
+  // HTTP Errors
   Server_Error,
   Unauthorised,
   Forbidden,
   NotFound,
   BadRequest,
-}
-
-export enum CommonAppErrors {
+  // App errors
   TokenNotFound,
   UnknownHttpError,
   FriendListVisibility,
@@ -18,10 +17,11 @@ export enum CommonAppErrors {
   PostModifyAccess,
   PostAlreadyLiked,
   PostAlreadyUnliked,
+  UnknownError,
 }
 
 export type SuccessT<T> = T;
-export type Success = SuccessT<boolean>;
+export type Success = SuccessT<true>;
 
 // Login
 export type LoginRequest = {
@@ -35,15 +35,15 @@ export class LoginResponse {
 
 export type LoginError =
   | 'Invalid'
-  | CommonHTTPErrors.Server_Error
-  | CommonAppErrors.UnknownHttpError;
+  | AppErrors.Server_Error
+  | AppErrors.UnknownHttpError;
 
 // Logout
 
 export type LogoutError =
-  | CommonHTTPErrors.Unauthorised
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error;
+  | AppErrors.Unauthorised
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error;
 
 // Register
 export type RegisterRequest = {
@@ -57,56 +57,62 @@ export class RegisterResponse {
   id!: number;
 }
 export type RegisterErrors =
-  | CommonHTTPErrors.BadRequest
-  | CommonHTTPErrors.Server_Error
-  | CommonAppErrors.UnknownHttpError;
+  | AppErrors.BadRequest
+  | AppErrors.Server_Error
+  | AppErrors.UnknownHttpError;
 
 // Get friend requests
-
-export type GetFriendRequestsError =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.BadRequest;
-
-export type AcceptFriendRequestError =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonHTTPErrors.Unauthorised;
-
-// Friends list
-export type PublicUser = {
+export type FriendRequestUser = {
   user_id: number;
   first_name: string;
   last_name: string;
   email: string;
 };
 
+export type GetFriendRequestsError =
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.BadRequest;
+
+export type SendFriendRequestError =
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.Unauthorised;
+
+// Friends list
+export type PublicUser = {
+  user_id: number;
+  user_givenname: string;
+  user_familyname: string;
+  user_email: string;
+};
+
 export type FriendsListErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonAppErrors.FriendListVisibility
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.FriendListVisibility
+  | AppErrors.Unauthorised;
 
 export type AddFriendErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonAppErrors.FriendAlreadyAdded
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.FriendAlreadyAdded
+  | AppErrors.Unauthorised;
 
 // User management
 export type GetUserInfoErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.UnknownHttpError
+  | AppErrors.Unauthorised;
 
 export type UserUpdateErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonHTTPErrors.BadRequest
-  | CommonHTTPErrors.Forbidden
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.BadRequest
+  | AppErrors.Forbidden
+  | AppErrors.UnknownHttpError
+  | AppErrors.Unauthorised;
 
 export type UserUpdateRequest = {
   email?: string;
@@ -118,16 +124,16 @@ export type UserUpdateRequest = {
 // User profile picture
 export type ProfilePictureSuccess = SuccessT<string>; // URL to local photo
 export type GetProfilePictureErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.UnknownHttpError
+  | AppErrors.Unauthorised;
 export type PostProfilePictureErrors =
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.NotFound
-  | CommonHTTPErrors.BadRequest
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.Server_Error
+  | AppErrors.NotFound
+  | AppErrors.BadRequest
+  | AppErrors.UnknownHttpError
+  | AppErrors.Unauthorised;
 
 // Post management
 
@@ -148,55 +154,55 @@ export type Post = {
 } & NewPost;
 
 export type GetPostListErrors =
-  | CommonAppErrors.UnknownHttpError
-  | CommonAppErrors.PostVisibility
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.UnknownHttpError
+  | AppErrors.PostVisibility
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 
 export type NewPostErrors =
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 
 export type GetPostErrors =
-  | CommonAppErrors.UnknownHttpError
-  | CommonAppErrors.PostVisibility
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.UnknownHttpError
+  | AppErrors.PostVisibility
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 
 export type RemovePostErrors =
-  | CommonAppErrors.PostDeleteAccess
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.PostDeleteAccess
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 
 export type UpdatePostErrors =
-  | CommonAppErrors.PostModifyAccess
-  | CommonHTTPErrors.BadRequest
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.PostModifyAccess
+  | AppErrors.BadRequest
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 export type LikePostErrors =
-  | CommonAppErrors.PostAlreadyLiked
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.PostAlreadyLiked
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 export type UnlikePostErrors =
-  | CommonAppErrors.PostAlreadyUnliked
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Server_Error
-  | CommonHTTPErrors.Unauthorised
-  | CommonHTTPErrors.NotFound;
+  | AppErrors.PostAlreadyUnliked
+  | AppErrors.UnknownHttpError
+  | AppErrors.Server_Error
+  | AppErrors.Unauthorised
+  | AppErrors.NotFound;
 
 // Search
 export type SearchErrors =
-  | CommonHTTPErrors.BadRequest
-  | CommonHTTPErrors.Server_Error
-  | CommonAppErrors.UnknownHttpError
-  | CommonHTTPErrors.Unauthorised;
+  | AppErrors.BadRequest
+  | AppErrors.Server_Error
+  | AppErrors.UnknownHttpError
+  | AppErrors.Unauthorised;

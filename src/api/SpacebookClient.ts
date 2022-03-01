@@ -1,7 +1,4 @@
-import {
-  CommonAppErrors,
-  PaginationOption,
-} from '../services/utils/SpacebookRequests';
+import {AppErrors, PaginationOption} from '../services/utils/SpacebookRequests';
 import Keychain from 'react-native-keychain';
 
 export enum Verbs {
@@ -28,7 +25,7 @@ export const initalListPostsPagination: PaginationOption = {
   offset: 0,
 };
 
-const baseURL: string = 'http://localhost:3333/api/1.0.0/';
+export const baseURL: string = 'http://localhost:3333/api/1.0.0/';
 
 function queryBuilder(
   input: Array<{key: string; value: string}> | undefined,
@@ -47,18 +44,18 @@ function queryBuilder(
   }
 }
 
-function authKey(): Promise<string | CommonAppErrors.TokenNotFound> {
+function authKey(): Promise<string | AppErrors.TokenNotFound> {
   return Keychain.getGenericPassword()
     .then(store => {
       if (store) {
         return store.password;
       } else {
-        return CommonAppErrors.TokenNotFound;
+        return AppErrors.TokenNotFound;
       }
     })
     .catch(error => {
       console.error(error);
-      return CommonAppErrors.TokenNotFound;
+      return AppErrors.TokenNotFound;
     });
 }
 
@@ -78,10 +75,9 @@ export async function req<RequestT extends object | undefined = undefined>(
   const headersToInclude = new Headers({'Content-Type': contentType});
 
   if (requriesAuth) {
-    const potentialKey: string | CommonAppErrors.TokenNotFound =
-      await authKey();
+    const potentialKey: string | AppErrors.TokenNotFound = await authKey();
 
-    if (potentialKey === CommonAppErrors.TokenNotFound) {
+    if (potentialKey === AppErrors.TokenNotFound) {
       console.error(
         'Token not found for authenticating requests! Everything will crash & burn',
       );
