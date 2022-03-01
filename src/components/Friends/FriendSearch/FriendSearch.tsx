@@ -25,7 +25,6 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
     async function getSearchResults() {
       const scope = isPublicSearch ? 'all' : 'friends';
       const request = await search(query, scope);
@@ -40,21 +39,12 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   }, [setRefreshing, isPublicSearch, query]);
 
   React.useEffect(() => {
-    async function getSearchResults() {
-      const scope = isPublicSearch ? 'all' : 'friends';
-      const request = await search(query, scope);
-      if (request.intendedResult !== undefined) {
-        setSearchResults(request.intendedResult);
-      } else {
-        // TODO
-      }
-    }
     if (query?.trim() !== '') {
-      getSearchResults();
+      onRefresh();
     } else {
       setSearchResults([]);
     }
-  }, [query, isPublicSearch]);
+  }, [query, isPublicSearch, onRefresh]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -86,7 +76,13 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
           keyExtractor={(item, _) => String(item.user_id)}
           getItemCount={x => x.length}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+                onRefresh();
+              }}
+            />
           }
           renderItem={item => (
             <FriendSearchOptions

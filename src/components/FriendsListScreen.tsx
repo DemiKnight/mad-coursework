@@ -1,5 +1,11 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, VirtualizedList} from 'react-native';
+import {
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  VirtualizedList,
+} from 'react-native';
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
@@ -15,7 +21,8 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   const [friendListData, setFriendListData] = React.useState<Array<PublicUser>>(
     [],
   );
-  React.useEffect(() => {
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
+  const onRefresh = React.useCallback(async () => {
     async function dataFn() {
       getFriendList(1).then(response => {
         if (response.intendedResult !== undefined) {
@@ -27,13 +34,19 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
       });
     }
 
-    dataFn();
+    await dataFn();
+    setRefreshing(false);
   }, [setFriendListData]);
+
+  React.useEffect(() => {
+    onRefresh();
+  }, [onRefresh]);
 
   if (friendListData.length === 0) {
     return (
       <SafeAreaView style={CommonStyles.centreColumn}>
         <EmptyListPlaceholder />
+        <Button title="Refresh" onPress={onRefresh} />
       </SafeAreaView>
     );
   }
@@ -46,6 +59,15 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
         getItem={(data: Array<PublicUser>, index) => data[index]}
         keyExtractor={(item, _) => String(item.user_id)}
         getItemCount={x => x.length}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              onRefresh();
+            }}
+          />
+        }
         renderItem={item => (
           <>
             <RowProfile

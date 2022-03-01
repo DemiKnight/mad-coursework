@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, VirtualizedList} from 'react-native';
+import {RefreshControl, SafeAreaView, VirtualizedList} from 'react-native';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
 import {getFriendRequests} from '../../../api/Friends';
@@ -8,6 +8,7 @@ import {FriendStackParams} from '../FriendsNav';
 import {FriendRequestOptions} from './FriendRequestOptions';
 import {EmptyListPlaceholder} from '../../Common/EmptyListPlaceholder';
 import CommonStyles from '../../Common/CommonStyles';
+import {Button} from 'react-native-elements';
 
 export type FriendRequestsProps = NativeStackScreenProps<
   FriendStackParams,
@@ -18,8 +19,9 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
   const [friendRequestList, setFriendRequestList] = useState<Array<PublicUser>>(
     [],
   );
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
+  const onRefresh = React.useCallback(async () => {
     async function obtainFriendRequestData() {
       const friendRequestData = await getFriendRequests();
       if (friendRequestData.intendedResult !== undefined) {
@@ -28,13 +30,19 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
         // TODO
       }
     }
-    obtainFriendRequestData();
+    await obtainFriendRequestData();
+    setRefreshing(false);
   }, [setFriendRequestList]);
+
+  React.useEffect(() => {
+    onRefresh();
+  }, [onRefresh]);
 
   if (friendRequestList.length === 0) {
     return (
       <SafeAreaView style={CommonStyles.centreColumn}>
         <EmptyListPlaceholder />
+        <Button title="Refresh" onPress={onRefresh} />
       </SafeAreaView>
     );
   }
@@ -47,6 +55,15 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
         getItem={(data: Array<PublicUser>, index) => data[index]}
         keyExtractor={(item, _) => String(item.user_id)}
         getItemCount={x => x.length}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              onRefresh();
+            }}
+          />
+        }
         renderItem={item => (
           <RowProfile
             target={item.item}
