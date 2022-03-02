@@ -10,9 +10,10 @@ import CommonStyles from '../../Common/CommonStyles';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
 import {ErrorButton} from '../../Common/ErrorButton';
 import {getFriendList} from '../../../api/Friends';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 type FriendsNavProps = NativeStackScreenProps<FriendStackParams, 'Profile'>;
-export const FullProfile = ({route}: FriendsNavProps) => {
+export const FullProfile = ({route, navigation}: FriendsNavProps) => {
   const [targetUser, setTargetUser] = React.useState<PublicUser>(
     route.params.user,
   );
@@ -102,7 +103,16 @@ export const FullProfile = ({route}: FriendsNavProps) => {
 
       <View>
         <Text>List of friends... or not if person isn't a friend.</Text>
-        {friendsList === undefined ? <Text>Add</Text> : <Button title="x" />}
+        {friendsList === undefined ? (
+          <Button icon={<Icon name="" />} onPress={() => {}} />
+        ) : (
+          <Button
+            title={`${friendsList.length} friends`}
+            onPress={() => {
+              navigation.navigate('FriendList', {friends: friendsList});
+            }}
+          />
+        )}
       </View>
       <Text>{route.params.user.user_id}</Text>
       <View>

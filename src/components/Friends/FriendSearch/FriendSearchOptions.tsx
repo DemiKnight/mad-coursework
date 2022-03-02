@@ -10,7 +10,7 @@ import {addFriend} from '../../../api/Friends';
 import {mapErrors} from '../../../api/RequestUtils';
 import {ErrorButton} from '../../Common/ErrorButton';
 
-enum FriendRequestStatus {
+export enum FriendRequestStatus {
   RequestSent,
   AlreadyFriend,
   Unknown,
