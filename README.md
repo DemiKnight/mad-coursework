@@ -1,5 +1,8 @@
-# coursework
+# MAD (Mobile application development) 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/DemiKnight/mad-coursework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DemiKnight/mad-coursework/alerts/) 
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/DemiKnight/mad-coursework.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DemiKnight/mad-coursework/context:javascript) 
 
+*Repository:* https://github.com/DemiKnight/mad-coursework
 
 # Commands
 - `npx pod-install ios`: Not 100% sure but I'm guessing updates libraries on the iOS emulator/app. Should be run after library changes
@@ -15,3 +18,7 @@
 - [React Navigation Typescript](https://reactnavigation.org/docs/typescript/)
 - [react-native-keychain](https://github.com/oblador/react-native-keychain#usage)
 - [React Native Elements](https://reactnativeelements.com/docs/overview)
+
+# Code quality
+- `LGTM`: https://lgtm.com/projects/g/DemiKnight/mad-coursework/?mode=list
+  - Code quality 

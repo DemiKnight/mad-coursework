@@ -148,8 +148,8 @@ export type NewPost = {
 
 export type Post = {
   post_id: number;
-  timestamp: number;
-  author: PublicUser;
+  timestamp: string;
+  author: FriendRequestUser;
   numLikes: number;
 } & NewPost;
 

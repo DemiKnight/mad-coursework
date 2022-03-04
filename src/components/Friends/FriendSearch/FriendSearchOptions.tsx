@@ -1,8 +1,8 @@
 import React from 'react';
-import {Button, Divider, Overlay, Text} from 'react-native-elements';
+import {Button, Divider} from 'react-native-elements';
 import {AppErrors, PublicUser} from '../../../services/utils/SpacebookRequests';
 import {RowProfile} from '../RowProfile/RowProfile';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/src/types';
 import {FriendStackParams} from '../FriendsNav';
@@ -19,7 +19,7 @@ export enum FriendRequestStatus {
 export const FriendSearchOptions = (props: {
   user: PublicUser;
   isPublicSearch: boolean;
-  nav: NativeStackNavigationProp<FriendStackParams, 'Search'>;
+  nav: NativeStackNavigationProp<FriendStackParams>;
 }) => {
   const [errors, setErrors] = React.useState<Array<string>>([]);
   const [friendRequestStatus, setFriendRequestStatus] =
@@ -50,7 +50,7 @@ export const FriendSearchOptions = (props: {
   }, [props.user, setFriendRequestStatus]);
 
   return (
-    <>
+    <SafeAreaView>
       <RowProfile
         target={props.user}
         optionsComponent={
@@ -95,7 +95,7 @@ export const FriendSearchOptions = (props: {
         }
       />
       <Divider />
-    </>
+    </SafeAreaView>
   );
 };
 
