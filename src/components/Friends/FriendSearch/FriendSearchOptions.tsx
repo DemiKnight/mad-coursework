@@ -19,7 +19,7 @@ export enum FriendRequestStatus {
 export const FriendSearchOptions = (props: {
   user: PublicUser;
   isPublicSearch: boolean;
-  nav: NativeStackNavigationProp<FriendStackParams>;
+  nav: NativeStackNavigationProp<FriendStackParams, 'Search'>;
 }) => {
   const [errors, setErrors] = React.useState<Array<string>>([]);
   const [friendRequestStatus, setFriendRequestStatus] =
