@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  VirtualizedList,
-} from 'react-native';
+import {RefreshControl, StyleSheet, View, VirtualizedList} from 'react-native';
 import {Divider, SearchBar, Switch, Text} from 'react-native-elements';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
 import {search} from '../../../api/Search';
@@ -16,6 +10,7 @@ import CommonStyles from '../../Common/CommonStyles';
 import {FriendSearchOptions} from './FriendSearchOptions';
 import {mapErrors} from '../../../api/RequestUtils';
 import {ErrorButton} from '../../Common/ErrorButton';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type FriendSearchProps = NativeStackScreenProps<FriendStackParams, 'Search'>;
 export const FriendSearch = ({navigation}: FriendSearchProps) => {
@@ -51,7 +46,7 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
   }, [query, isPublicSearch, onRefresh]);
 
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <View style={styles.wrapper}>
       <SearchBar
         placeholder={`${isPublicSearch ? 'Public' : 'Friend'} search...`}
         platform="ios"
@@ -99,7 +94,7 @@ export const FriendSearch = ({navigation}: FriendSearchProps) => {
           )}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
