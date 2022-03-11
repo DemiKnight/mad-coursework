@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../../../App';
 import {Button, Text} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -9,6 +9,7 @@ import {PublicUser} from '../../services/utils/SpacebookRequests';
 import {getUserInfo} from '../../api/User';
 import {ErrorButton} from '../Common/ErrorButton';
 import {mapErrors} from '../../api/RequestUtils';
+import {ProfileHeader} from '../Friends/FullProfile/ProfileHeader';
 
 type SettingsMenuProps = NativeStackScreenProps<SettingsStackNavParams, 'Menu'>;
 export const SettingsMenuScreen = ({navigation}: SettingsMenuProps) => {
@@ -32,11 +33,11 @@ export const SettingsMenuScreen = ({navigation}: SettingsMenuProps) => {
   }, [currentUser]);
 
   return (
-    <View>
+    <View style={styles.settingsMenuWrapper}>
       <ErrorButton errors={errors} />
       {currentUser && (
         <>
-          <Text>{currentUser.user_givenname}</Text>
+          <ProfileHeader user={currentUser} avatarSize={'large'} />
           <Button
             title="Edit Profile"
             onPress={() =>
@@ -56,3 +57,9 @@ export const SettingsMenuScreen = ({navigation}: SettingsMenuProps) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  settingsMenuWrapper: {
+    padding: 5,
+    flexDirection: 'column',
+  },
+});
