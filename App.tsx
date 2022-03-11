@@ -15,6 +15,7 @@ import {SettingsScreen} from './src/components/SettingsScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
+import {PostNavScreen} from './src/components/Posts/PostNavScreen';
 
 export type RootStackParams = {
   Posts: undefined;
@@ -144,7 +145,11 @@ const App = () => {
         <AuthContext.Provider value={authContext}>
           {state.userToken !== undefined ? (
             <TabNav.Navigator initialRouteName="Posts">
-              <TabNav.Screen name="Posts" component={PostsScreen} />
+              <TabNav.Screen
+                name="Posts"
+                component={PostNavScreen}
+                options={{headerShown: false}}
+              />
               <TabNav.Screen
                 name="Friends"
                 component={FriendsNav}
