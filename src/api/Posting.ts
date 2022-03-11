@@ -7,6 +7,7 @@ import {
   NewPostErrors,
   PaginationOption,
   Post,
+  PostRaw,
   RemovePostErrors,
   Success,
   UnlikePostErrors,
@@ -20,6 +21,7 @@ import {
   req,
   Verbs,
 } from './SpacebookClient';
+import {UserToPubUser} from '../services/utils/UserUtils';
 
 export async function getAllPosts(
   userId: number,
@@ -70,9 +72,15 @@ export async function getListOfPosts(
     const responseStr = JSON.stringify(response);
     switch (response.status) {
       case 200:
-        const body: Array<Post> = await response.json();
-        console.debug(`Success ${body}`);
-        return ok(body);
+        const body: Array<PostRaw> = await response.json();
+        console.debug(`Success ${JSON.stringify(body)}`);
+        const convertedBody: Array<Post> = body.map(rawP => {
+          return {
+            ...rawP,
+            author: UserToPubUser(rawP.author),
+          } as Post;
+        });
+        return ok(convertedBody);
       case 401:
         console.error(
           `Unauthorised whilst getting list of post: ${responseStr}`,

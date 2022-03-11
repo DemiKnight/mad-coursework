@@ -1,10 +1,9 @@
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
-import {Avatar, Text} from 'react-native-elements';
+import {Text} from 'react-native-elements';
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {initialsFromUser} from '../../../services/utils/UserUtils';
 import {RowProfileStats} from './RowProfileStats';
-import {getUserProfilePicture} from '../../../api/User';
+import {ProfileAvatar} from './ProfileAvatar';
 
 export type RowProfileProps = {
   target: PublicUser;
@@ -12,43 +11,9 @@ export type RowProfileProps = {
 };
 
 export const RowProfile = ({target, optionsComponent}: RowProfileProps) => {
-  const [profilePic, setProfilePicture] = React.useState<string | undefined>(
-    undefined,
-  );
-
-  React.useEffect(() => {
-    async function getProfilePicture() {
-      const request = await getUserProfilePicture(target.user_id);
-      if (request.intendedResult !== undefined) {
-        setProfilePicture(request.intendedResult);
-      }
-    }
-    // Any other errors, we'll just default to user initials.
-    if (profilePic === undefined) {
-      getProfilePicture();
-    }
-  }, [profilePic, target.user_id]);
-
   return (
     <SafeAreaView style={styles.wrapper}>
-      {profilePic === undefined ? (
-        <Avatar
-          overlayContainerStyle={[styles.avatarContainer]}
-          size={'medium'}
-          rounded
-          containerStyle={[styles.avatarColumn]}
-          title={initialsFromUser(target)}
-        />
-      ) : (
-        <Avatar
-          rounded
-          containerStyle={[styles.avatarColumn]}
-          size={'medium'}
-          source={{
-            uri: profilePic,
-          }}
-        />
-      )}
+      <ProfileAvatar user={target} avatarSize="medium" />
       <View style={[styles.middleColumn, styles.nameColumn]}>
         <Text>
           {target.user_givenname} {target.user_familyname}
@@ -70,10 +35,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 2,
     flex: 1,
-  },
-  avatarColumn: {},
-  avatarContainer: {
-    backgroundColor: 'blue',
   },
   nameColumn: {
     flexGrow: 1,

@@ -1,6 +1,7 @@
 import {errorResp, Handler, ok, req, Verbs} from './SpacebookClient';
 import {
   AppErrors,
+  FriendRequestUser,
   GetProfilePictureErrors,
   GetUserInfoErrors,
   PostProfilePictureErrors,
@@ -10,6 +11,7 @@ import {
   UserUpdateErrors,
   UserUpdateRequest,
 } from '../services/utils/SpacebookRequests';
+import {UserToPubUser} from '../services/utils/UserUtils';
 
 export async function getUserInfo(
   userId: number,
@@ -22,9 +24,9 @@ export async function getUserInfo(
 
     switch (response.status) {
       case 200:
-        const body: PublicUser = await response.json();
+        const body: FriendRequestUser = await response.json();
         console.info(`Successfully retrieved user info ${responseStr}`);
-        return ok(body);
+        return ok(UserToPubUser(body));
       case 404:
         console.error(`User not found: ${responseStr}`);
         return errorResp(AppErrors.NotFound);

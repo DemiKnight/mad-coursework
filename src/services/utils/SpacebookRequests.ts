@@ -146,12 +146,18 @@ export type NewPost = {
   text: string;
 };
 
-export type Post = {
+export type PostRaw = {
+  author: FriendRequestUser;
+} & PostPure;
+export type PostPure = {
   post_id: number;
-  timestamp: number;
-  author: PublicUser;
+  timestamp: string;
   numLikes: number;
 } & NewPost;
+
+export type Post = {
+  author: PublicUser;
+} & PostPure;
 
 export type GetPostListErrors =
   | AppErrors.UnknownHttpError

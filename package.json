@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-plugin-import": "^2.25.4",
     "react": "17.0.2",
     "react-native": "0.67.2",
     "react-native-elements": "^3.4.2",

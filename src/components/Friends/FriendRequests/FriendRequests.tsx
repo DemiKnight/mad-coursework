@@ -13,9 +13,9 @@ import {FriendStackParams} from '../FriendsNav';
 import {FriendRequestOptions} from './FriendRequestOptions';
 import {EmptyListPlaceholder} from '../../Common/EmptyListPlaceholder';
 import CommonStyles from '../../Common/CommonStyles';
-import {Button, Divider, Overlay, Text} from 'react-native-elements';
+import {Button} from 'react-native-elements';
 import {mapErrors} from '../../../api/RequestUtils';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {ErrorButton} from '../../Common/ErrorButton';
 
 export type FriendRequestsProps = NativeStackScreenProps<
   FriendStackParams,
@@ -28,7 +28,6 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
   );
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<Array<string>>([]);
-  const [errorOverlayVisible, setErrorOverlayVisible] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {
     async function obtainFriendRequestData() {
@@ -49,26 +48,7 @@ export const FriendRequests = ({navigation}: FriendRequestsProps) => {
 
   return (
     <SafeAreaView style={CommonStyles.centreColumn}>
-      {errors.length !== 0 && (
-        <>
-          <Button
-            type="outline"
-            onPress={() => setErrorOverlayVisible(true)}
-            icon={<Icon name="warning" color="red" size={20} />}
-          />
-          <Overlay
-            isVisible={errorOverlayVisible}
-            onBackdropPress={() => setErrorOverlayVisible(false)}>
-            <Text>Errors</Text>
-            {errors.map(errorStr => (
-              <Text key={errorStr} style={styles.errorText}>
-                {errorStr}
-              </Text>
-            ))}
-          </Overlay>
-          <Divider />
-        </>
-      )}
+      <ErrorButton errors={errors} />
       {friendRequestList.length === 0 ? (
         <>
           <EmptyListPlaceholder />
