@@ -12,14 +12,14 @@ import {mapErrors} from '../../api/RequestUtils';
 import {ProfileHeader} from '../Friends/FullProfile/ProfileHeader';
 
 type SettingsMenuProps = NativeStackScreenProps<SettingsStackNavParams, 'Menu'>;
-export const SettingsMenuScreen = ({navigation}: SettingsMenuProps) => {
+export const SettingsMenuScreen = ({route, navigation}: SettingsMenuProps) => {
   const [currentUser, setCurrentUser] = React.useState<PublicUser>();
   const [errors, setErrors] = React.useState<Array<string>>([]);
 
   const {signOut} = React.useContext(AuthContext);
 
   React.useMemo(async () => {
-    if (!currentUser) {
+    if (!currentUser || route.params?.refresh) {
       const userId = await Keychain.getGenericPassword();
       if (userId) {
         const request = await getUserInfo(parseInt(userId.username, 10));
@@ -30,7 +30,7 @@ export const SettingsMenuScreen = ({navigation}: SettingsMenuProps) => {
         }
       }
     }
-  }, [currentUser]);
+  }, [currentUser, route.params?.refresh]);
 
   return (
     <View style={styles.settingsMenuWrapper}>

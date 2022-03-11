@@ -61,7 +61,9 @@ export const UpdateProfileScreen = ({
       if (request.intendedResult !== undefined) {
         setSuccessfullyUpdated(true);
         setTimeout(() => {
-          navigation.navigate('Menu');
+          navigation.navigate('Menu', {
+            refresh: true,
+          });
         }, 1000);
       } else {
         setErrors(mapErrors(request.errors));
@@ -135,7 +137,7 @@ export const UpdateProfileScreen = ({
           style={[styles.inputField]}
         />
       </View>
-      <Button title="Save" disabled={noChanges} />
+      <Button title="Save" disabled={noChanges} onPress={saveChanges} />
     </View>
   );
 };

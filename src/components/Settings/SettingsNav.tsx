@@ -5,7 +5,7 @@ import {UpdateProfileScreen} from './UpdateProfileScreen';
 import {PublicUser} from '../../services/utils/SpacebookRequests';
 
 export type SettingsStackNavParams = {
-  Menu: undefined;
+  Menu: {refresh: boolean};
   UpdateProfile: {
     user: PublicUser;
   };
