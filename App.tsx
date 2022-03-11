@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {Home} from './src/components/Home/Home';
+import {PostsScreen} from './src/components/Home/PostsScreen';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
@@ -17,7 +17,7 @@ import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
 
 export type RootStackParams = {
-  Home: undefined;
+  Posts: undefined;
   Settings: undefined;
   Friends: undefined;
 };
@@ -143,8 +143,8 @@ const App = () => {
       <NavigationContainer>
         <AuthContext.Provider value={authContext}>
           {state.userToken !== undefined ? (
-            <TabNav.Navigator initialRouteName="Home">
-              <TabNav.Screen name="Home" component={Home} />
+            <TabNav.Navigator initialRouteName="Posts">
+              <TabNav.Screen name="Posts" component={PostsScreen} />
               <TabNav.Screen
                 name="Friends"
                 component={FriendsNav}
