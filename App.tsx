@@ -16,6 +16,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
 import {PostNavScreen} from './src/components/Posts/PostNavScreen';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export type RootStackParams = {
   Posts: undefined;
@@ -148,14 +149,50 @@ const App = () => {
               <TabNav.Screen
                 name="Posts"
                 component={PostNavScreen}
-                options={{headerShown: false}}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="edit"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
               />
               <TabNav.Screen
                 name="Friends"
                 component={FriendsNav}
-                options={{headerShown: false}}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="addusergroup"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
               />
-              <TabNav.Screen name="Settings" component={SettingsScreen} />
+              <TabNav.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="setting"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
+              />
             </TabNav.Navigator>
           ) : (
             <Auth />
@@ -165,5 +202,4 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
-
 export default App;
