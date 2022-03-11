@@ -1,16 +1,24 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {Button} from 'react-native-elements';
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import {Button, Divider} from 'react-native-elements';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PostStackNavParams} from '../Posts/PostNavScreen';
+import {PostList} from '../Posts/PostList/PostList';
+import Keychain from 'react-native-keychain';
 
 type PostNavProps = NativeStackScreenProps<PostStackNavParams, 'View'>;
 export const PostsScreen = ({navigation}: PostNavProps) => {
+  const [userId, setUserId] = React.useState<number>();
+  React.useMemo(async () => {
+    const creds = await Keychain.getGenericPassword();
+    if (creds) {
+      setUserId(parseInt(creds.username, 10));
+    } else {
+    }
+  }, []);
+
   return (
-    <SafeAreaView style={styles.homeText}>
+    <View style={styles.postScreenWrapper}>
       <View style={styles.controlButtonWrappers}>
         <Button
           title="Create post"
@@ -25,16 +33,20 @@ export const PostsScreen = ({navigation}: PostNavProps) => {
           onPress={() => navigation.navigate('Schedule')}
         />
       </View>
-    </SafeAreaView>
+      <Divider />
+      {userId && <PostList userId={userId} />}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  homeText: {
+  postScreenWrapper: {
     flex: 1,
   },
   controlButtonWrappers: {
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 5,
+    // alignItems: 'center',
   },
 });

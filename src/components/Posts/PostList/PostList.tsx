@@ -49,11 +49,3 @@ export const PostList = (props: {userId: number}) => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  postListWrapper: {
-    borderColor: '#008000',
-    borderWidth: 5,
-    maxHeight: 300,
-  },
-});
