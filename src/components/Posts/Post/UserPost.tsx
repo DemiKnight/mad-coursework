@@ -7,7 +7,7 @@ import {ProfileAvatar} from '../../Friends/RowProfile/ProfileAvatar';
 import {likePost, removePost, unlikePost} from '../../../api/Posting';
 import {mapErrors} from '../../../api/RequestUtils';
 import {useNavigation} from '@react-navigation/native';
-import {EditPostProps} from '../EditPostScreen';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/src/types';
 import {PostStackNavParams} from '../PostNavScreen';
 
 enum LikeStatus {
@@ -23,7 +23,8 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
   const [errors, setErrors] = React.useState<Array<string>>([]);
   const [likeCount, setLikeCount] = React.useState<number>(props.post.numLikes);
   const [isDeleted, setIsDeleted] = React.useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<PostStackNavParams>>();
 
   const toggleLike = React.useCallback(async () => {
     if (postLikeStatus === LikeStatus.NotLiked) {
@@ -130,6 +131,16 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
           />
         </>
       )}
+      <Button
+        icon={<Icon name="eyeo" size={20} />}
+        type="outline"
+        onPress={() =>
+          navigation.navigate('SinglePost', {
+            userId: props.post.author.user_id,
+            postId: props.post.post_id,
+          })
+        }
+      />
     </View>
   );
 };

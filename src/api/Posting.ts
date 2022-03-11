@@ -152,9 +152,13 @@ export async function getPost(
     const responseStr = JSON.stringify(response);
     switch (response.status) {
       case 200:
-        const body: Post = await response.json();
+        const body = await response.json();
         console.debug(`Success ${body}`);
-        return ok(body);
+        const convertedBody = {
+          ...body,
+          author: UserToPubUser(body.author),
+        } as Post;
+        return ok(convertedBody);
       case 401:
         console.error(`Unauthorised whilst getting post: ${responseStr}`);
         return errorResp(AppErrors.Unauthorised);

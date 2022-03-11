@@ -23,3 +23,9 @@ export function UserToPubUser(oldUser: FriendRequestUser): PublicUser {
     user_id: oldUser.user_id,
   };
 }
+
+export function readableDateTiem(str: string): string {
+  const date = new Date(str);
+
+  return date.toLocaleDateString();
+}

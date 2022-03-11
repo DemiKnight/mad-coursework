@@ -36,8 +36,16 @@ export const PostNavScreen = () => {
       <PostStack.Screen name="Create" component={CreatePostsScreen} />
       <PostStack.Screen name="Draft" component={DraftScreen} />
       <PostStack.Screen name="Schedule" component={ScheduleScreen} />
-      <PostStack.Screen name="EditPost" component={EditPostScreen} />
-      <PostStack.Screen name="SinglePost" component={SinglePostScreen} />
+      <PostStack.Screen
+        name="EditPost"
+        component={EditPostScreen}
+        options={{headerTitle: 'Edit Post'}}
+      />
+      <PostStack.Screen
+        name="SinglePost"
+        component={SinglePostScreen}
+        options={{headerTitle: 'Post'}}
+      />
     </PostStack.Navigator>
   );
 };
