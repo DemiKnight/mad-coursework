@@ -1,4 +1,6 @@
 import {FriendRequestUser, PublicUser} from './SpacebookRequests';
+import {PermissionsAndroid, Platform} from 'react-native';
+import CameraRoll from '@react-native-community/cameraroll';
 
 export function initialsFromUser(target: PublicUser): string {
   const firstName = target?.user_givenname?.charAt(0);
@@ -27,4 +29,16 @@ export function trimPostText(content: string, size: number = 150): string {
   } else {
     return content;
   }
+}
+
+export async function requestPhotoPermission() {
+  const permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+
+  const hasPermission = await PermissionsAndroid.check(permission);
+  if (hasPermission) {
+    return true;
+  }
+
+  const status = await PermissionsAndroid.request(permission);
+  return status === 'granted';
 }
