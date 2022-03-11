@@ -111,7 +111,13 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
   return (
     <View style={styles.postWrapper}>
       <ProfileAvatar user={props.post.author} avatarSize="small" />
-      <Text style={styles.postText}>{props.post.text}</Text>
+      <View>
+        <Text style={styles.nameText}>
+          {props.post.author.user_givenname} {props.post.author.user_familyname}
+        </Text>
+        <Text style={styles.postText}>{props.post.text}</Text>
+      </View>
+
       {props.post.author.user_id !== props.loggedInUserId && (
         <Button onPress={toggleLike} type="outline" icon={likeButtonIcon} />
       )}
@@ -158,5 +164,8 @@ const styles = StyleSheet.create({
   likesCounter: {
     color: 'rgb(0,131,117)',
     marginLeft: 2,
+  },
+  nameText: {
+    fontWeight: 'bold',
   },
 });

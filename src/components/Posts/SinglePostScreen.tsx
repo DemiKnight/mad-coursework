@@ -20,11 +20,9 @@ export const SinglePostScreen = ({route}: SinglePostProps) => {
     if (request.intendedResult !== undefined) {
       setUpdatedPost(request.intendedResult);
     } else {
-      setErrors(mapErrors(request.errors));
+      setErrors(mapErrors(request.errors, 'Getting', 'Post'));
     }
   }, [route.params.userId, route.params.postId]);
-
-  console.debug(updatedPost?.author);
 
   if (updatedPost) {
     return (
@@ -65,7 +63,12 @@ export const SinglePostScreen = ({route}: SinglePostProps) => {
       </View>
     );
   } else {
-    return <Text>Loading...</Text>;
+    return (
+      <View>
+        <ErrorButton errors={errors} />
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 };
 

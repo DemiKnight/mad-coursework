@@ -10,7 +10,6 @@ import CommonStyles from '../../Common/CommonStyles';
 import {FriendSearchOptions} from './FriendSearchOptions';
 import {mapErrors} from '../../../api/RequestUtils';
 import {ErrorButton} from '../../Common/ErrorButton';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 type FriendSearchProps = NativeStackScreenProps<FriendStackParams, 'Search'>;
 export const FriendSearch = ({navigation}: FriendSearchProps) => {
