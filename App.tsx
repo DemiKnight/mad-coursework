@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {PostsScreen} from './src/components/Posts/PostsScreen';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
@@ -11,7 +10,6 @@ import {
   RegisterResponse,
 } from './src/services/utils/SpacebookRequests';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {SettingsScreen} from './src/components/SettingsScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
