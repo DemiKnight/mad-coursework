@@ -3,16 +3,7 @@ import {FriendRequestUser, PublicUser} from './SpacebookRequests';
 export function initialsFromUser(target: PublicUser): string {
   const firstName = target?.user_givenname?.charAt(0);
   const lastName = target?.user_familyname?.charAt(0);
-  console.debug(
-    `${(firstName || '') + (lastName || '')} ${JSON.stringify(target)}`,
-  );
   return (firstName || '') + (lastName || '');
-}
-
-export function backgroundColourRandom(name: string): string {
-  // TODO
-  console.log(`${name}`);
-  return '#222222';
 }
 
 export function UserToPubUser(oldUser: FriendRequestUser): PublicUser {

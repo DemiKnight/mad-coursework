@@ -11,6 +11,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		26CA5D39D9D3562CF88AE0C1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50398AF1794B29D6E44C14D7 /* ExpoModulesProvider.swift */; };
+		27319B9C580B443AAE4B7468 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDD2620A7BADD24282D7897 /* ExpoModulesProvider.swift */; };
 		6172F2D35A4C3AA820D92908 /* libPods-coursework.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-coursework.a */; };
 		7EF68E3733C33B6898317E18 /* libPods-coursework-courseworkTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-coursework-courseworkTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -37,9 +39,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = coursework/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = coursework/main.m; sourceTree = "<group>"; };
 		1D0AE47A65C8663E3B452821 /* Pods-coursework-courseworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coursework-courseworkTests.release.xcconfig"; path = "Target Support Files/Pods-coursework-courseworkTests/Pods-coursework-courseworkTests.release.xcconfig"; sourceTree = "<group>"; };
+		50398AF1794B29D6E44C14D7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-coursework/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-coursework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-coursework.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-coursework-courseworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coursework-courseworkTests.debug.xcconfig"; path = "Target Support Files/Pods-coursework-courseworkTests/Pods-coursework-courseworkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = coursework/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9DDD2620A7BADD24282D7897 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-coursework-courseworkTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ABFE59519B596E51CEFDCCC0 /* libPods-coursework-courseworkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-coursework-courseworkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0A881CF5CF3F2B244570E2A /* Pods-coursework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coursework.debug.xcconfig"; path = "Target Support Files/Pods-coursework/Pods-coursework.debug.xcconfig"; sourceTree = "<group>"; };
 		D00AAFFCFCFDA5787532823F /* Pods-coursework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-coursework.release.xcconfig"; path = "Target Support Files/Pods-coursework/Pods-coursework.release.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +87,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		088005058CCF77996C06B68B /* courseworkTests */ = {
+			isa = PBXGroup;
+			children = (
+				9DDD2620A7BADD24282D7897 /* ExpoModulesProvider.swift */,
+			);
+			name = courseworkTests;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* coursework */ = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +106,23 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = coursework;
+			sourceTree = "<group>";
+		};
+		169F44A8A8767EEE9EDD1689 /* coursework */ = {
+			isa = PBXGroup;
+			children = (
+				50398AF1794B29D6E44C14D7 /* ExpoModulesProvider.swift */,
+			);
+			name = coursework;
+			sourceTree = "<group>";
+		};
+		2BFFC7E7F3072A9640513453 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				169F44A8A8767EEE9EDD1689 /* coursework */,
+				088005058CCF77996C06B68B /* courseworkTests */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -122,6 +151,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				E233CBF5F47BEE60B243DCF8 /* Pods */,
+				2BFFC7E7F3072A9640513453 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -404,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* courseworkTests.m in Sources */,
+				27319B9C580B443AAE4B7468 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +444,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				26CA5D39D9D3562CF88AE0C1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +469,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = courseworkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,7 +493,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = courseworkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,7 +609,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -635,7 +667,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",

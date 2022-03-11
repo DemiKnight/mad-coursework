@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {Avatar, Text} from 'react-native-elements';
+import {Avatar} from 'react-native-elements';
 import {getUserProfilePicture} from '../../../api/User';
 import {initialsFromUser} from '../../../services/utils/UserUtils';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';

@@ -9,6 +9,7 @@ import {Divider, Text} from 'react-native-elements';
 import {ErrorButton} from '../Common/ErrorButton';
 import {ProfileAvatar} from '../Friends/RowProfile/ProfileAvatar';
 import {readableDateTiem} from '../../services/utils/UserUtils';
+import {ProfileHeader} from '../Friends/FullProfile/ProfileHeader';
 
 type SinglePostProps = NativeStackScreenProps<PostStackNavParams, 'SinglePost'>;
 export const SinglePostScreen = ({route}: SinglePostProps) => {
@@ -28,23 +29,7 @@ export const SinglePostScreen = ({route}: SinglePostProps) => {
     return (
       <View style={styles.postWrapper}>
         <ErrorButton errors={errors} />
-        <View style={styles.fullProfileHeader}>
-          <ProfileAvatar user={updatedPost.author} avatarSize="large" />
-
-          <View>
-            <Text style={styles.nameText}>
-              {updatedPost.author.user_givenname}{' '}
-              {updatedPost.author.user_familyname}
-            </Text>
-
-            <Text style={styles.emailText}>
-              {updatedPost.author.user_email}{' '}
-              <Text style={styles.emailText}>
-                ({updatedPost.author.user_id})
-              </Text>
-            </Text>
-          </View>
-        </View>
+        <ProfileHeader user={updatedPost.author} avatarSize="large" />
         <View style={styles.postStatsWrapper}>
           <Text style={styles.likeText}>
             {updatedPost.numLikes.toLocaleString('en-GB', {
@@ -54,7 +39,7 @@ export const SinglePostScreen = ({route}: SinglePostProps) => {
             })}{' '}
             Likes
           </Text>
-          <Text style={styles.emailText}>
+          <Text style={styles.dateText}>
             Posted: {readableDateTiem(updatedPost.timestamp)}
           </Text>
         </View>
@@ -79,18 +64,7 @@ const styles = StyleSheet.create({
     flexBasis: 'auto',
     padding: 5,
   },
-  fullProfileHeader: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  avatarContainer: {
-    backgroundColor: 'blue',
-  },
-  nameText: {
-    fontWeight: 'bold',
-    fontSize: 30,
-  },
-  emailText: {
+  dateText: {
     color: '#808080',
     fontSize: 15,
   },

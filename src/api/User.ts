@@ -128,18 +128,22 @@ export async function getUserProfilePicture(
 
 export async function changeUserProfilePicture(
   userId: number,
-  photo: Blob,
-  photoType: 'png' | 'jpeg' = 'png',
+  photoURI: string,
 ): Promise<Handler<PostProfilePictureErrors, Success>> {
   console.info(`Setting user profile picture for ${userId}`);
+
+  const fileExtension = photoURI.endsWith('jpg') ? 'jpeg' : 'png';
+
+  const res = await fetch(photoURI);
+  const blob = await res.blob();
 
   const request = await req(
     `user/${userId}/photo`,
     Verbs.POST,
-    photo,
+    blob,
     undefined,
     undefined,
-    `image/${photoType}`,
+    `image/${fileExtension}`,
   );
 
   return fetch(request).then(response => {

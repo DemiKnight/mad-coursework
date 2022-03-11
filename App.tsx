@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {PostsScreen} from './src/components/Home/PostsScreen';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
@@ -11,12 +10,12 @@ import {
   RegisterResponse,
 } from './src/services/utils/SpacebookRequests';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {SettingsScreen} from './src/components/SettingsScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
 import {PostNavScreen} from './src/components/Posts/PostNavScreen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {SettingsNav} from './src/components/Settings/SettingsNav';
 
 export type RootStackParams = {
   Posts: undefined;
@@ -180,8 +179,9 @@ const App = () => {
               />
               <TabNav.Screen
                 name="Settings"
-                component={SettingsScreen}
+                component={SettingsNav}
                 options={{
+                  headerShown: false,
                   tabBarIcon: iProps => {
                     return (
                       <Icon

@@ -2,8 +2,8 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {PostStackNavParams} from '../Posts/PostNavScreen';
-import {PostList} from '../Posts/PostList/PostList';
+import {PostStackNavParams} from './PostNavScreen';
+import {PostList} from './PostList/PostList';
 import Keychain from 'react-native-keychain';
 
 type PostNavProps = NativeStackScreenProps<PostStackNavParams, 'View'>;
