@@ -25,12 +25,13 @@ export const SettingsMenuScreen = ({route, navigation}: SettingsMenuProps) => {
         const request = await getUserInfo(parseInt(userId.username, 10));
         if (request.intendedResult !== undefined) {
           setCurrentUser(request.intendedResult);
+          navigation.setParams({refresh: false});
         } else {
           setErrors(mapErrors(request.errors, 'Getting', 'User'));
         }
       }
     }
-  }, [currentUser, route.params?.refresh]);
+  }, [navigation, currentUser, route.params?.refresh]);
 
   return (
     <View style={styles.settingsMenuWrapper}>
