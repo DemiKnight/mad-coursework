@@ -4,7 +4,7 @@ import {Button, Text} from 'react-native-elements';
 import {AppErrors, Post} from '../../../services/utils/SpacebookRequests';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {ProfileAvatar} from '../../Friends/RowProfile/ProfileAvatar';
-import {likePost, unlikePost} from '../../../api/Posting';
+import {likePost, removePost, unlikePost} from '../../../api/Posting';
 import {mapErrors} from '../../../api/RequestUtils';
 
 enum LikeStatus {
@@ -13,12 +13,14 @@ enum LikeStatus {
   NotLiked,
 }
 
-export const UserPost = (props: {post: Post}) => {
+export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
   const [postLikeStatus, setPostLikeStatus] = React.useState<LikeStatus>(
     LikeStatus.NotLiked,
   );
   const [errors, setErrors] = React.useState<Array<string>>([]);
   const [likeCount, setLikeCount] = React.useState<number>(props.post.numLikes);
+
+  const [isDeleted, setIsDeleted] = React.useState<boolean>(false);
 
   const toggleLike = React.useCallback(async () => {
     if (postLikeStatus === LikeStatus.NotLiked) {
@@ -63,6 +65,18 @@ export const UserPost = (props: {post: Post}) => {
     likeCount,
   ]);
 
+  const deletePost = React.useCallback(async () => {
+    const request = await removePost(
+      props.post.author.user_id,
+      props.post.post_id,
+    );
+    if (request.intendedResult !== undefined) {
+      setIsDeleted(true);
+    } else {
+      setErrors(mapErrors(request.errors));
+    }
+  }, [props.post.author.user_id, props.post.post_id]);
+
   let likeButton;
   if (postLikeStatus === LikeStatus.NotLiked) {
     likeButton = (
@@ -90,12 +104,24 @@ export const UserPost = (props: {post: Post}) => {
     );
   }
 
+  if (isDeleted) {
+    return null;
+  }
+
   return (
     <View style={styles.postWrapper}>
       <ProfileAvatar user={props.post.author} avatarSize="small" />
       <Text style={styles.postText}>{props.post.text}</Text>
-      {likeButton}
+      {props.post.author.user_id !== props.loggedInUserId && likeButton}
+
       <Text style={styles.likesCounter}>{likeCount}</Text>
+      {props.post.author.user_id === props.loggedInUserId && (
+        <Button
+          type="outline"
+          icon={<Icon name="delete" size={20} />}
+          onPress={deletePost}
+        />
+      )}
     </View>
   );
 };
@@ -106,7 +132,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     padding: 5,
   },
-  postText: {},
+  postText: {
+    maxWidth: 200,
+  },
   likeButton: {},
   likesCounter: {
     color: 'rgba(0,131,117,0.97)',
