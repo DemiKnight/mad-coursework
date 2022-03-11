@@ -1,6 +1,6 @@
-import React, {useMemo} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
-import {Avatar, Button, Text} from 'react-native-elements';
+import React from 'react';
+import {Image, StyleSheet, TextInput, View} from 'react-native';
+import {Button, Text} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {ProfileAvatar} from '../Friends/RowProfile/ProfileAvatar';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -8,6 +8,8 @@ import {SettingsStackNavParams} from './SettingsNav';
 import {updateUserInfo} from '../../api/User';
 import {ErrorButton} from '../Common/ErrorButton';
 import {mapErrors} from '../../api/RequestUtils';
+
+import * as ImagePicker from 'expo-image-picker';
 
 type UpdateProfileProps = NativeStackScreenProps<
   SettingsStackNavParams,
@@ -27,6 +29,21 @@ export const UpdateProfileScreen = ({
   const [password, setPassword] = React.useState('');
   const [succesfullyUpdated, setSuccessfullyUpdated] = React.useState(false);
   const [errors, setErrors] = React.useState<Array<string>>([]);
+  const [image, setImage] = React.useState<string | undefined>(undefined);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   const noChanges: boolean = React.useMemo(() => {
     return (
@@ -94,6 +111,7 @@ export const UpdateProfileScreen = ({
           style={styles.avatarSectionChangeButton}
           type="outline"
           title="Change Profile Picture"
+          onPress={pickImage}
           icon={<Icon name="picture" size={30} />}
         />
       </View>
