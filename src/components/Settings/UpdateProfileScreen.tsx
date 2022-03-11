@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {ProfileAvatar} from '../Friends/RowProfile/ProfileAvatar';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SettingsStackNavParams} from './SettingsNav';
-import {updateUserInfo} from '../../api/User';
+import {changeUserProfilePicture, updateUserInfo} from '../../api/User';
 import {ErrorButton} from '../Common/ErrorButton';
 import {mapErrors} from '../../api/RequestUtils';
 
@@ -29,9 +29,8 @@ export const UpdateProfileScreen = ({
   const [password, setPassword] = React.useState('');
   const [succesfullyUpdated, setSuccessfullyUpdated] = React.useState(false);
   const [errors, setErrors] = React.useState<Array<string>>([]);
-  const [image, setImage] = React.useState<string | undefined>(undefined);
 
-  const pickImage = async () => {
+  const pickImage = React.useCallback(async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -41,9 +40,24 @@ export const UpdateProfileScreen = ({
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      const request = await changeUserProfilePicture(
+        route.params.user.user_id,
+        result.uri,
+      );
+
+      if (request.intendedResult !== undefined) {
+        console.info('Successfully uploaded photo.');
+        setSuccessfullyUpdated(true);
+        setTimeout(() => {
+          navigation.navigate('Menu', {
+            refresh: true,
+          });
+        }, 2000);
+      } else {
+        setErrors(mapErrors(request.errors));
+      }
     }
-  };
+  }, [route.params.user.user_id]);
 
   const noChanges: boolean = React.useMemo(() => {
     return (
