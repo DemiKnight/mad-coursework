@@ -108,8 +108,21 @@ export async function getUserProfilePicture(
         console.info(
           `Successfully retrieved photo ${photoBlob.size} ${photoBlob.type}`,
         );
-        const urlPhoto: string = URL.createObjectURL(photoBlob);
-        return ok(urlPhoto);
+        // const fileReaderInstance = new FileReader();
+        // fileReaderInstance.readAsDataURL(photoBlob);
+        // fileReaderInstance.onload = () => {
+        //   console.log(`xxx ${JSON.stringify(fileReaderInstance.result)}`);
+        // };
+        // // fileReaderInstance.
+        // console.log(`x2x ${JSON.stringify(fileReaderInstance.result)}`);
+
+        const test: unknown = await new Promise((resolve, _) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(photoBlob);
+        });
+
+        return ok(test as string);
       case 401:
         console.error(`Unauthorised request for user ${userId} ${responseStr}`);
         return errorResp(AppErrors.Unauthorised);

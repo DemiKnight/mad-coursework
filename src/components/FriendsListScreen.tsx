@@ -11,7 +11,8 @@ import {EmptyListPlaceholder} from './Common/EmptyListPlaceholder';
 import CommonStyles from './Common/CommonStyles';
 import {mapErrors} from '../api/RequestUtils';
 import {ErrorButton} from './Common/ErrorButton';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Keychain from 'react-native-keychain';
+import {getUserInfo} from '../api/User';
 
 type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
 export const FriendsListScreen = ({navigation}: FriendsListProps) => {
@@ -20,20 +21,37 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
   );
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<Array<string>>([]);
+  const [currentUser, setCurrentUser] = React.useState<PublicUser>();
+
+  React.useMemo(async () => {
+    if (!currentUser) {
+      const userId = await Keychain.getGenericPassword();
+      if (userId) {
+        const request = await getUserInfo(parseInt(userId.username, 10));
+        if (request.intendedResult !== undefined) {
+          setCurrentUser(request.intendedResult);
+        } else {
+          setErrors(mapErrors(request.errors, 'Getting', 'User'));
+        }
+      }
+    }
+  }, [currentUser]);
 
   const onRefresh = React.useCallback(async () => {
     async function dataFn() {
-      const request = await getFriendList(1);
-      if (request.intendedResult !== undefined) {
-        setFriendListData(request.intendedResult);
-      } else {
-        setErrors(mapErrors(request.errors));
+      if (currentUser !== undefined) {
+        const request = await getFriendList(currentUser.user_id);
+        if (request.intendedResult !== undefined) {
+          setFriendListData(request.intendedResult);
+        } else {
+          setErrors(mapErrors(request.errors));
+        }
       }
     }
 
     await dataFn();
     setRefreshing(false);
-  }, [setFriendListData]);
+  }, [setFriendListData, currentUser]);
 
   React.useEffect(() => {
     onRefresh();

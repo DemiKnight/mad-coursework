@@ -25,7 +25,7 @@ export const initalListPostsPagination: PaginationOption = {
   offset: 0,
 };
 
-export const baseURL: string = 'http://localhost:3333/api/1.0.0/';
+export const baseURL: string = 'http://10.0.2.2:3333/api/1.0.0/';
 
 function queryBuilder(
   input: Array<{key: string; value: string}> | undefined,
