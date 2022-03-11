@@ -9,6 +9,7 @@ import Keychain from 'react-native-keychain';
 type PostNavProps = NativeStackScreenProps<PostStackNavParams, 'View'>;
 export const PostsScreen = ({navigation}: PostNavProps) => {
   const [userId, setUserId] = React.useState<number>();
+
   React.useMemo(async () => {
     const creds = await Keychain.getGenericPassword();
     if (creds) {
@@ -22,7 +23,7 @@ export const PostsScreen = ({navigation}: PostNavProps) => {
       <View style={styles.controlButtonWrappers}>
         <Button
           title="Create post"
-          onPress={() => navigation.navigate('Create')}
+          onPress={() => navigation.navigate('Create', {userId: userId})}
         />
         <Button
           title="Draft Posts"
