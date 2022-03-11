@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  VirtualizedList,
-} from 'react-native';
+import {RefreshControl, StyleSheet, View, VirtualizedList} from 'react-native';
 import {RowProfile} from './Friends/RowProfile/RowProfile';
 import {PublicUser} from '../services/utils/SpacebookRequests';
 import {getFriendList} from '../api/Friends';
@@ -17,6 +11,7 @@ import {EmptyListPlaceholder} from './Common/EmptyListPlaceholder';
 import CommonStyles from './Common/CommonStyles';
 import {mapErrors} from '../api/RequestUtils';
 import {ErrorButton} from './Common/ErrorButton';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type FriendsListProps = NativeStackScreenProps<FriendStackParams, 'List'>;
 export const FriendsListScreen = ({navigation}: FriendsListProps) => {
@@ -46,15 +41,15 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
 
   if (friendListData.length === 0) {
     return (
-      <SafeAreaView style={CommonStyles.centreColumn}>
+      <View style={CommonStyles.centreColumn}>
         <EmptyListPlaceholder />
         <Button title="Refresh" onPress={onRefresh} />
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <View style={styles.friendsListWrapper}>
       <ErrorButton errors={errors} />
 
       {friendListData.length === 0 ? (
@@ -99,12 +94,12 @@ export const FriendsListScreen = ({navigation}: FriendsListProps) => {
           )}
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  friendsListWrapper: {
     flex: 1,
     flexDirection: 'column',
     margin: 7,

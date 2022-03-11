@@ -1,9 +1,10 @@
 import React from 'react';
 import {PublicUser} from '../../../services/utils/SpacebookRequests';
-import {SafeAreaView, VirtualizedList} from 'react-native';
+import {VirtualizedList} from 'react-native';
 import {RowProfile} from '../RowProfile/RowProfile';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {FriendStackParams} from '../FriendsNav';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type ProfileFriendsListProps = NativeStackScreenProps<
   FriendStackParams,

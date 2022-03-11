@@ -1,10 +1,14 @@
 import React from 'react';
-import {Post, PublicUser} from '../../../services/utils/SpacebookRequests';
+import {
+  AppErrors,
+  Post,
+  PublicUser,
+} from '../../../services/utils/SpacebookRequests';
 import {StyleSheet, View, VirtualizedList} from 'react-native';
-import Text from 'react-native-elements/dist/text/Text';
 import {UserPost} from '../Post/UserPost';
 import {getAllPosts} from '../../../api/Posting';
 import {mapErrors} from '../../../api/RequestUtils';
+import {Divider} from 'react-native-elements';
 
 export const PostList = (props: {userId: number}) => {
   const [postList, setPostList] = React.useState<Array<Post>>([]);
@@ -16,7 +20,13 @@ export const PostList = (props: {userId: number}) => {
     if (result.intendedResult !== undefined) {
       setPostList(result.intendedResult);
     } else {
-      setErrors(mapErrors(result.errors, 'Getting', ''));
+      switch (result.errors) {
+        case AppErrors.PostVisibility:
+          // Not an error, just don't render the list
+          break;
+        default:
+          setErrors(mapErrors(result.errors, 'Getting', 'Posts'));
+      }
     }
   }, [props.userId]);
 
@@ -28,8 +38,8 @@ export const PostList = (props: {userId: number}) => {
     <VirtualizedList<Post>
       renderItem={item => (
         <>
-          <Text>{item.index}</Text>
           <UserPost post={item.item} />
+          <Divider />
         </>
       )}
       getItem={(data: Array<Post>, index) => data[index]}
