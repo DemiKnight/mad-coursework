@@ -6,6 +6,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {ProfileAvatar} from '../../Friends/RowProfile/ProfileAvatar';
 import {likePost, removePost, unlikePost} from '../../../api/Posting';
 import {mapErrors} from '../../../api/RequestUtils';
+import {useNavigation} from '@react-navigation/native';
+import {EditPostProps} from '../EditPostScreen';
+import {PostStackNavParams} from '../PostNavScreen';
 
 enum LikeStatus {
   Liked,
@@ -19,8 +22,8 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
   );
   const [errors, setErrors] = React.useState<Array<string>>([]);
   const [likeCount, setLikeCount] = React.useState<number>(props.post.numLikes);
-
   const [isDeleted, setIsDeleted] = React.useState<boolean>(false);
+  const navigation = useNavigation();
 
   const toggleLike = React.useCallback(async () => {
     if (postLikeStatus === LikeStatus.NotLiked) {
@@ -77,31 +80,27 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
     }
   }, [props.post.author.user_id, props.post.post_id]);
 
-  let likeButton;
+  const editPost = React.useCallback(() => {
+    // Will work, types not behaving or need to implement better.
+    navigation.navigate('EditPost', {
+      originalContent: props.post.text,
+      originalPostId: props.post.post_id,
+      originalUserId: props.post.author.user_id,
+    });
+  }, [
+    navigation,
+    props.post.text,
+    props.post.post_id,
+    props.post.author.user_id,
+  ]);
+
+  let likeButtonIcon;
   if (postLikeStatus === LikeStatus.NotLiked) {
-    likeButton = (
-      <Button
-        onPress={toggleLike}
-        type="outline"
-        icon={<Icon name="like2" size={20} />}
-      />
-    );
+    likeButtonIcon = <Icon name="like2" size={20} />;
   } else if (postLikeStatus === LikeStatus.Liked) {
-    likeButton = (
-      <Button
-        onPress={toggleLike}
-        type="outline"
-        icon={<Icon name="dislike2" size={20} />}
-      />
-    );
+    likeButtonIcon = <Icon name="dislike2" size={20} />;
   } else {
-    likeButton = (
-      <Button
-        onPress={toggleLike}
-        type="outline"
-        icon={<Icon name="dislike2" color="red" size={20} />}
-      />
-    );
+    likeButtonIcon = <Icon name="dislike2" color="red" size={20} />;
   }
 
   if (isDeleted) {
@@ -112,15 +111,24 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
     <View style={styles.postWrapper}>
       <ProfileAvatar user={props.post.author} avatarSize="small" />
       <Text style={styles.postText}>{props.post.text}</Text>
-      {props.post.author.user_id !== props.loggedInUserId && likeButton}
+      {props.post.author.user_id !== props.loggedInUserId && (
+        <Button onPress={toggleLike} type="outline" icon={likeButtonIcon} />
+      )}
 
       <Text style={styles.likesCounter}>{likeCount}</Text>
       {props.post.author.user_id === props.loggedInUserId && (
-        <Button
-          type="outline"
-          icon={<Icon name="delete" size={20} />}
-          onPress={deletePost}
-        />
+        <>
+          <Button
+            type="outline"
+            icon={<Icon name="delete" size={20} />}
+            onPress={deletePost}
+          />
+          <Button
+            type="outline"
+            icon={<Icon name="form" size={20} />}
+            onPress={editPost}
+          />
+        </>
       )}
     </View>
   );
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
   },
   likeButton: {},
   likesCounter: {
-    color: 'rgba(0,131,117,0.97)',
+    color: 'rgb(0,131,117)',
     marginLeft: 2,
   },
 });
