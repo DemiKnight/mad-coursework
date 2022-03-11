@@ -1,12 +1,14 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {View} from 'react-native';
 import {SettingsMenuScreen} from './SettingsMenuScreen';
 import {UpdateProfileScreen} from './UpdateProfileScreen';
+import {PublicUser} from '../../services/utils/SpacebookRequests';
 
 export type SettingsStackNavParams = {
   Menu: undefined;
-  UpdateProfile: undefined;
+  UpdateProfile: {
+    user: PublicUser;
+  };
 };
 
 const SettingsStack = createNativeStackNavigator<SettingsStackNavParams>();
