@@ -6,12 +6,17 @@ import {ProfileAvatar} from '../Friends/RowProfile/ProfileAvatar';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SettingsStackNavParams} from './SettingsNav';
 import {updateUserInfo} from '../../api/User';
+import {ErrorButton} from '../Common/ErrorButton';
+import {mapErrors} from '../../api/RequestUtils';
 
 type UpdateProfileProps = NativeStackScreenProps<
   SettingsStackNavParams,
   'UpdateProfile'
 >;
-export const UpdateProfileScreen = ({route}: UpdateProfileProps) => {
+export const UpdateProfileScreen = ({
+  route,
+  navigation,
+}: UpdateProfileProps) => {
   const [firstName, setFirstName] = React.useState(
     route.params.user.user_givenname,
   );
@@ -20,6 +25,8 @@ export const UpdateProfileScreen = ({route}: UpdateProfileProps) => {
   );
   const [email, setEmail] = React.useState(route.params.user.user_email);
   const [password, setPassword] = React.useState('');
+  const [succesfullyUpdated, setSuccessfullyUpdated] = React.useState(false);
+  const [errors, setErrors] = React.useState<Array<string>>([]);
 
   const noChanges: boolean = React.useMemo(() => {
     return (
@@ -52,10 +59,16 @@ export const UpdateProfileScreen = ({route}: UpdateProfileProps) => {
       );
 
       if (request.intendedResult !== undefined) {
+        setSuccessfullyUpdated(true);
+        setTimeout(() => {
+          navigation.navigate('Menu');
+        }, 1000);
       } else {
+        setErrors(mapErrors(request.errors));
       }
     }
   }, [
+    navigation,
     noChanges,
     firstName,
     route.params.user.user_givenname,
@@ -69,7 +82,11 @@ export const UpdateProfileScreen = ({route}: UpdateProfileProps) => {
 
   return (
     <View style={styles.updateProfileWrapper}>
+      <ErrorButton errors={errors} />
       <View style={styles.avatarSection}>
+        {succesfullyUpdated && (
+          <Text style={styles.successText}>Successfully updated</Text>
+        )}
         <ProfileAvatar user={route.params.user} avatarSize="medium" />
         <Button
           style={styles.avatarSectionChangeButton}
@@ -144,5 +161,10 @@ const styles = StyleSheet.create({
   },
   avatarSectionChangeButton: {
     marginTop: 5,
+  },
+  successText: {
+    color: '#198754',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });
