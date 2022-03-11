@@ -9,6 +9,7 @@ import {mapErrors} from '../../../api/RequestUtils';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/src/types';
 import {PostStackNavParams} from '../PostNavScreen';
+import {trimPostText} from '../../../services/utils/UserUtils';
 
 enum LikeStatus {
   Liked,
@@ -111,18 +112,21 @@ export const UserPost = (props: {post: Post; loggedInUserId?: number}) => {
   return (
     <View style={styles.postWrapper}>
       <ProfileAvatar user={props.post.author} avatarSize="small" />
-      <View>
+      <View style={styles.postContentWrapper}>
         <Text style={styles.nameText}>
           {props.post.author.user_givenname} {props.post.author.user_familyname}
         </Text>
-        <Text style={styles.postText}>{props.post.text}</Text>
+        <Text style={styles.postText}>{trimPostText(props.post.text, 70)}</Text>
       </View>
+
+      <Text style={styles.likesCounter}>
+        <Icon name="like2" /> {likeCount}
+      </Text>
 
       {props.post.author.user_id !== props.loggedInUserId && (
         <Button onPress={toggleLike} type="outline" icon={likeButtonIcon} />
       )}
 
-      <Text style={styles.likesCounter}>{likeCount}</Text>
       {props.post.author.user_id === props.loggedInUserId && (
         <>
           <Button
@@ -156,6 +160,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: 'auto',
     padding: 5,
+    alignItems: 'center',
+  },
+  postContentWrapper: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexWrap: 'nowrap',
   },
   postText: {
     maxWidth: 200,
@@ -164,6 +174,7 @@ const styles = StyleSheet.create({
   likesCounter: {
     color: 'rgb(0,131,117)',
     marginLeft: 2,
+    marginRight: 2,
   },
   nameText: {
     fontWeight: 'bold',

@@ -153,7 +153,7 @@ export async function getPost(
     switch (response.status) {
       case 200:
         const body = await response.json();
-        console.debug(`Success ${body}`);
+        console.debug(`Success ${JSON.stringify(body)}`);
         const convertedBody = {
           ...body,
           author: UserToPubUser(body.author),
