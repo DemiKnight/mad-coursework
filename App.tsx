@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {PostsScreen} from './src/components/Home/PostsScreen';
+import {PostsScreen} from './src/components/Posts/PostsScreen';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
@@ -17,6 +17,7 @@ import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
 import {PostNavScreen} from './src/components/Posts/PostNavScreen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {SettingsNav} from './src/components/Settings/SettingsNav';
 
 export type RootStackParams = {
   Posts: undefined;
@@ -180,8 +181,9 @@ const App = () => {
               />
               <TabNav.Screen
                 name="Settings"
-                component={SettingsScreen}
+                component={SettingsNav}
                 options={{
+                  headerShown: false,
                   tabBarIcon: iProps => {
                     return (
                       <Icon

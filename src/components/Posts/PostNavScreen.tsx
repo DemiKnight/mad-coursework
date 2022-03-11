@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {PostsScreen} from '../Home/PostsScreen';
+import {PostsScreen} from './PostsScreen';
 import {CreatePostsScreen} from './CreatePostsScreen';
 import {DraftScreen} from './DraftScreen';
 import {ScheduleScreen} from './ScheduleScreen';
