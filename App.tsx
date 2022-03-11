@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {Home} from './src/components/Home/Home';
+import {PostsScreen} from './src/components/Home/PostsScreen';
 import {Auth} from './src/components/Auth/Auth';
 import {Handler} from './src/api/SpacebookClient';
 import Keychain, {UserCredentials} from 'react-native-keychain';
@@ -15,9 +15,11 @@ import {SettingsScreen} from './src/components/SettingsScreen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {login, logout, register} from './src/api/Auth';
 import {FriendsNav} from './src/components/Friends/FriendsNav';
+import {PostNavScreen} from './src/components/Posts/PostNavScreen';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export type RootStackParams = {
-  Home: undefined;
+  Posts: undefined;
   Settings: undefined;
   Friends: undefined;
 };
@@ -143,14 +145,54 @@ const App = () => {
       <NavigationContainer>
         <AuthContext.Provider value={authContext}>
           {state.userToken !== undefined ? (
-            <TabNav.Navigator initialRouteName="Home">
-              <TabNav.Screen name="Home" component={Home} />
+            <TabNav.Navigator initialRouteName="Posts">
+              <TabNav.Screen
+                name="Posts"
+                component={PostNavScreen}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="edit"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
+              />
               <TabNav.Screen
                 name="Friends"
                 component={FriendsNav}
-                options={{headerShown: false}}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="addusergroup"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
               />
-              <TabNav.Screen name="Settings" component={SettingsScreen} />
+              <TabNav.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                  tabBarIcon: iProps => {
+                    return (
+                      <Icon
+                        name="setting"
+                        size={iProps.size}
+                        color={iProps.color}
+                      />
+                    );
+                  },
+                }}
+              />
             </TabNav.Navigator>
           ) : (
             <Auth />
@@ -160,5 +202,4 @@ const App = () => {
     </SafeAreaProvider>
   );
 };
-
 export default App;

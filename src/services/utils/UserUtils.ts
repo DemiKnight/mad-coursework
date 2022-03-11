@@ -23,3 +23,17 @@ export function UserToPubUser(oldUser: FriendRequestUser): PublicUser {
     user_id: oldUser.user_id,
   };
 }
+
+export function readableDateTiem(str: string): string {
+  const date = new Date(str);
+
+  return date.toLocaleDateString();
+}
+
+export function trimPostText(content: string, size: number = 150): string {
+  if (content.length >= size - 3) {
+    return content.substring(0, size - 3) + '...';
+  } else {
+    return content;
+  }
+}
